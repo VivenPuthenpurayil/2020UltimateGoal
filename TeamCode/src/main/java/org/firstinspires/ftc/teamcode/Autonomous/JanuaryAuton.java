@@ -24,6 +24,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.Control.Goal;
 import org.opencv.core.Core;
@@ -55,6 +56,8 @@ public class JanuaryAuton extends AutonomousControl
         // out when the RC activity is in portrait. We do our actual image processing assuming
         // landscape orientation, though.
 
+        rob.webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+
         rob.webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -65,14 +68,41 @@ public class JanuaryAuton extends AutonomousControl
         });
 
         double currTime = runtime.milliseconds();
-
+//
         waitForStart();
 
         if (opModeIsActive())
         {
-            rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
+            double dist = rob.Back.getDistance(DistanceUnit.INCH);
 
-            while(runtime.milliseconds() < 5000) {
+
+            do{
+                rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                dist = rob.Back.getDistance(DistanceUnit.INCH);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+
+            }
+            while(dist >1000 || dist < 31 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+            rob.stopDrivetrain();
+
+            do{
+                rob.driveTrainMovement(0.6, Goal.movements.left);
+
+                dist = rob.rightFront.getDistance(DistanceUnit.INCH);
+                telemetry.addData("cm front", "%.2f cm", dist);
+                telemetry.update();
+
+            }
+            while(dist >1000 || dist < 7 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+            rob.stopDrivetrain();
+
+            sleep(100);
+
+            while(opModeIsActive() && runtime.milliseconds() < 6000) {
                 telemetry.addData("Analysis", pipeline.getAnalysis());
                 telemetry.addData("Position", pipeline.position);
                 telemetry.addData("Value", pipeline.value);
@@ -83,11 +113,14 @@ public class JanuaryAuton extends AutonomousControl
             }
             if (pipeline.value == 4){
 
+
             }else if(pipeline.value == 1){
 
             }else{
 
             }
+
+
 
         }
     }
