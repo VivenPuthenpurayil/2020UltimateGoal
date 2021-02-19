@@ -68,11 +68,9 @@ public class EasyOpenCV extends AutonomousControl
 
         waitForStart();
 
-        if (opModeIsActive())
+        while (opModeIsActive())
         {
             //rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
-
-            while(runtime.milliseconds() < 5000) {
                 telemetry.addData("Analysis", pipeline.getAnalysis());
                 telemetry.addData("Position", pipeline.position);
                 telemetry.addData("Value", pipeline.value);
@@ -80,7 +78,7 @@ public class EasyOpenCV extends AutonomousControl
 
                 // Don't burn CPU cycles busy-looping in this sample
                 sleep(50);
-            }
+
             if (pipeline.value == 4){
 
             }else if(pipeline.value == 1){

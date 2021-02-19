@@ -93,6 +93,7 @@ public class Goal {
                     setupFly();
                     setupWobbleGoalSystem();
                     setupUltra();
+                    setupIMU();
                     break;
                 case storage:
                     setupStorage();
