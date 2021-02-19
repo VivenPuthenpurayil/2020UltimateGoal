@@ -26,10 +26,14 @@ public class CurrentTeleop extends TeleOpControl {
         waitForStart();
 
         while (opModeIsActive()){
+            double IMUOrientB = -1;
             double distanceBack = rob.rightBack.getDistance(DistanceUnit.CM);
             double distanceFront = rob.rightFront.getDistance(DistanceUnit.CM);
             telemetry.addData("back", "%.2f cm", rob.Back.getDistance(DistanceUnit.CM));
-            telemetry.addData("angle", "%.2f",(Math.atan((distanceFront-distanceBack)/6.6142)*180)/(3.1415));
+             telemetry.addData("angle", "%.2f",IMUOrientB);
+            IMUOrientB = rob.getDirection();
+
+            // telemetry.addData("angle", "%.2f",(Math.atan((distanceFront-distanceBack)/6.6142)*180)/(3.1415));
             telemetry.update();
             standardGamepadData();
 
@@ -128,6 +132,7 @@ public class CurrentTeleop extends TeleOpControl {
             if (gamepad2.y) {
                 flywheelon = true;
                 move_to_pos = true;
+
             }
 
             if (gamepad2.x) {
@@ -201,8 +206,16 @@ public class CurrentTeleop extends TeleOpControl {
                     continue;
                 }
 
-                angle = (Math.atan((distanceFront - distanceBack) / 6.6142) * 180) / (3.1415);
-                rob.driveTrainEncoderMovement(.5, 12.75 / 90 * angle, 10, 10, Goal.movements.ccw);
+              //  angle = (Math.atan((distanceFront - distanceBack) / 6.6142) * 180) / (3.1415);
+                 angle = rob.calculateDifferenceBetweenAngles(rob.getDirection(), IMUOrientB);
+                if (angle > 0){
+                    rob.turn((float) (Math.abs(angle)), Goal.turnside.cw, 0.9, Goal.axis.center);
+                }
+                else {
+                    rob.turn((float) (Math.abs(angle)), Goal.turnside.ccw, 0.9, Goal.axis.center);
+
+                }
+
 
                 while (true) {
                     if (rob.Back.getDistance((DistanceUnit.CM)) > 1000){

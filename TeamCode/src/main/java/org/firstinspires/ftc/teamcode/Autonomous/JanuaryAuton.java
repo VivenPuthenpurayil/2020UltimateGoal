@@ -70,7 +70,9 @@ public class JanuaryAuton extends AutonomousControl
 
         if (opModeIsActive())
         {
-            rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 36, 4, 0, Goal.movements.forward);
+            int dist;
+            boolean one = false;
 
             while(runtime.milliseconds() < 5000) {
                 telemetry.addData("Analysis", pipeline.getAnalysis());
@@ -81,13 +83,117 @@ public class JanuaryAuton extends AutonomousControl
                 // Don't burn CPU cycles busy-looping in this sample
                 sleep(50);
             }
+
             if (pipeline.value == 4){
-
-            }else if(pipeline.value == 1){
-
-            }else{
-
+                dist = 110;
             }
+            else if(pipeline.value == 1){
+                dist = 90;
+                one = true;
+            }
+            else{
+                dist = 66;
+            }
+
+            //move to red square
+            rob.driveTrainEncoderMovement(1, dist-36, 20, 0, Goal.movements.forward);
+            if (one) {
+                rob.driveTrainEncoderMovement(1, 10, 20, 0, Goal.movements.left);
+            }
+
+            //drop wobble goal
+            rob.pinch.setPosition(0.8);
+            sleep(500);
+            rob.claw.setPower(0.3);
+            sleep(500);
+            rob.claw.setPower(0);
+            sleep(250);
+
+
+            //move back to pick up second wobble goal
+            rob.driveTrainEncoderMovement(1, dist-10, 20, 0, Goal.movements.backward);
+
+            rob.lifter.setPosition(.84);
+            sleep(200);
+
+            if (!one) {
+                rob.driveTrainEncoderMovement(1, 6, 20, 0, Goal.movements.left);
+            }
+
+            // turn to face second wobble goal
+            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.cw);
+
+            rob.pinch.setPosition(0.8);
+            sleep(500);
+
+            // move to second wobble goal
+            rob.driveTrainEncoderMovement(.75, 16, 20, 0, Goal.movements.forward);
+
+            // pick up second wobble goal
+            sleep(250);
+            rob.claw.setPower(-0.3);
+            sleep(300);
+            rob.claw.setPower(0);
+            sleep(500);
+            rob.pinch.setPosition(0);
+            sleep(400);
+            rob.claw.setPower(-0.4);
+            sleep(350);
+            rob.claw.setPower(0);
+            sleep(250);
+
+            // move backwards to go back to red square
+            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.ccw);
+            if (one) {
+                rob.driveTrainEncoderMovement(1, 17, 20, 0, Goal.movements.right);
+            }
+            else {
+                rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.right);
+            }
+
+            rob.driveTrainEncoderMovement(1, dist - 24, 20, 0, Goal.movements.forward);
+
+            //drop wobble goal
+            rob.pinch.setPosition(0.8);
+            sleep(250);
+            rob.claw.setPower(0.3);
+            sleep(500);
+            rob.claw.setPower(0);
+            sleep(250);
+
+            // start flywheel
+//          rob.fly.setPower(-0.635);
+            rob.fly.setPower(-0.73);
+            sleep(500);
+
+            // move backwards a bit so you dont hit the wobble goal
+            rob.driveTrainEncoderMovement(1, dist - 59, 20, 0, Goal.movements.backward);
+
+            // move towards wall
+            // rob.driveTrainEncoderMovement(1,9,20, 0, Goal.movements.right);
+
+            // move to the left, to align shots
+//          rob.driveTrainEncoderMovement(1,44,20,0,Goal.movements.left);
+            if (!one) rob.driveTrainEncoderMovement(1, 22, 20, 0, Goal.movements.left);
+
+            // move to right behind white line
+            rob.driveTrainEncoderMovement(1, 9, 20, 0, Goal.movements.forward);
+
+
+            sleep(500);
+            for (int i = 0; i <= 2; i++) {
+                rob.fly.setPower(-0.73);
+                sleep(200);
+                //200
+                rob.whack.setPosition(0.62);
+                sleep(1000);
+                //1000 each
+                rob.whack.setPosition(0);
+                sleep(1000);
+            }
+
+            // move to Launch Line
+            rob.driveTrainEncoderMovement(1, 8, 100, 100, Goal.movements.forward);
 
         }
     }
