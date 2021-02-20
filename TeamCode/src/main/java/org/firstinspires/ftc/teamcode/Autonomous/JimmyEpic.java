@@ -23,17 +23,18 @@ public class JimmyEpic extends AutonomousControl {
         while (opModeIsActive()) {
 
             // pick up wobble goal
-//            rob.claw.setPower(-0.4);
-//            sleep(750);
-//            rob.claw.setPower(0);
-//            sleep(250);
+            rob.claw.setPower(-0.4);
+            sleep(750);
+            rob.claw.setPower(0);
+            sleep(250);
 
             //move to red square
-            //    rob.driveTrainEncoderMovement(1,10,20,0,Goal.movements.right);
-//            rob.driveTrainEncoderMovement(1,66,20,0,Goal.movements.forward);
+            //rob.driveTrainEncoderMovement(1,10,20,0,Goal.movements.right);
+            //rob.driveTrainEncoderMovement(1,66,20,0,Goal.movements.forward);
             // previous 63
 
             // move to red square
+            /*
             while (true) {
                 if (rob.Back.getDistance((DistanceUnit.CM)) > 1000) {
                     continue;
@@ -45,8 +46,8 @@ public class JimmyEpic extends AutonomousControl {
                 }
                 else break;
             }
+            */
 
-/*
             //drop wobble goal
             rob.pinch.setPosition(0.8);
             sleep(500);
@@ -129,7 +130,7 @@ public class JimmyEpic extends AutonomousControl {
             sleep(250);
 
 
- */
+
         }
     }
 

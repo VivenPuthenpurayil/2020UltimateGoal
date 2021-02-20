@@ -34,6 +34,8 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 
 @Autonomous(name="TTTT Open CV", group = "basic")
 public class EasyOpenCV extends AutonomousControl
@@ -67,27 +69,58 @@ public class EasyOpenCV extends AutonomousControl
         double currTime = runtime.milliseconds();
 
         waitForStart();
-
-        while (opModeIsActive())
-        {
+double x = 0.0;
             //rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
-                telemetry.addData("Analysis", pipeline.getAnalysis());
-                telemetry.addData("Position", pipeline.position);
-                telemetry.addData("Value", pipeline.value);
-                telemetry.update();
+            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Position", pipeline.position);
+            telemetry.addData("Value", pipeline.value);
+        telemetry.addData("US value", "%.2f cm", rob.Back.getDistance(DistanceUnit.CM));
+        telemetry.addData("comp", "%.2f cm", x);
+        telemetry.update();
 
-                // Don't burn CPU cycles busy-looping in this sample
+
+
+        /*while((x<91) || (x > 1000)){
+                rob.driveTrainEncoderMovement(0.6, 5, 10, 0, Goal.movements.forward);
                 sleep(50);
+                x = rob.Back.getDistance(DistanceUnit.CM);
+               telemetry.update();
+               sleep(50);
+        }
+*/
 
-            if (pipeline.value == 4){
+        rob.driveTrainEncoderMovement(0.8, 36, 1000, 0, Goal.movements.forward);
 
-            }else if(pipeline.value == 1){
+        int r = (int) rob.Back.getDistance(DistanceUnit.CM);
 
-            }else{
+        while(r!=91){
+            if(r>91 && !outlier()){
+                rob.driveTrainEncoderMovement(0.2, 0.4, 10, 0, Goal.movements.backward);
+            }
+            else if(!outlier()){
+                rob.driveTrainEncoderMovement(0.2, 0.4, 10, 0, Goal.movements.forward);
+            }
+            r = (int) rob.Back.getDistance(DistanceUnit.CM);
+        }
 
+            while(opModeIsActive()){
+               telemetry.update();
             }
 
-        }
+        /*    telemetry.update();
+
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
+            telemetry.update();
+            if (pipeline.value == 4) {
+
+            } else if (pipeline.value == 1) {
+
+            } else {
+
+            }
+*/
+
     }
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
@@ -103,6 +136,7 @@ public class EasyOpenCV extends AutonomousControl
         }
 
         public int value = 0;
+
         /*
          * Some color constants
          */
