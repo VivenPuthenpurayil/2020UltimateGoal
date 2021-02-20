@@ -35,8 +35,8 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Autonomous(name="TTTT Open CV", group = "basic")
-public class EasyOpenCV extends AutonomousControl
+@Autonomous(name="OpenCV test", group = "basic")
+public class OpenCvTest extends AutonomousControl
 {
     SkystoneDeterminationPipeline pipeline;
 
@@ -118,7 +118,8 @@ public class EasyOpenCV extends AutonomousControl
         static final int REGION_HEIGHT = 100;
 
         final int FOUR_RING_THRESHOLD = 147;
-        final int ONE_RING_THRESHOLD = 135;
+        final int ONE_RING_THRESHOLD = 140;
+        final int ZERO_RING_THRESHOLD = 120;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -177,7 +178,7 @@ public class EasyOpenCV extends AutonomousControl
             }else if (avg1 > ONE_RING_THRESHOLD){
                 position = RingPosition.ONE;
                 value = 1;
-            }else{
+            }else if (avg1 < 140){
                 position = RingPosition.NONE;
                 value = 0;
             }

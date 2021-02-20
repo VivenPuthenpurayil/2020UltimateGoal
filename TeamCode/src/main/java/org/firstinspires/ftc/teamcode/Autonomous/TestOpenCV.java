@@ -14,7 +14,7 @@ public class TestOpenCV extends AutonomousControl {
         telemetry.addLine("Start!");
         telemetry.update();
 
-        EasyOpenCV thing = new EasyOpenCV();
+        OpenCvTest thing = new OpenCvTest();
 
     }
 }

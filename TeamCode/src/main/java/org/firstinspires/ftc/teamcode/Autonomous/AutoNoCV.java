@@ -2,12 +2,21 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.Control.Goal;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="RealAuto)", group = "basic")
 
-public class DecemberMeet extends AutonomousControl {
+@Autonomous(name="Auto w/out openCV)", group = "basic")
+
+public class AutoNoCV extends AutonomousControl {
+
+    Orientation angles;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -16,7 +25,9 @@ public class DecemberMeet extends AutonomousControl {
         telemetry.update();
 
         if (opModeIsActive()){
-
+            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("angle", angles.firstAngle);
+            telemetry.update();
             // pick up wobble goal
              rob.claw.setPower(-0.4);
           sleep(750);
@@ -168,6 +179,19 @@ public class DecemberMeet extends AutonomousControl {
             sleep(500);
             rob.claw.setPower(0);
             sleep(250);
+            telemetry.addData("back",rob.Back.getDistance(DistanceUnit.CM) );
+
+            while (rob.Back.getDistance(DistanceUnit.CM) > 153){
+                rob.driveTrainMovement(1, Goal.movements.backward);
+            }
+            rob.stopDrivetrain();
+            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            rob.driveTrainIMUSwingTurnMovement(0.1, Goal.movements.backward, 300, (int)angles.firstAngle, 0.2, Goal.turnside.cw);
+            while(rob.rightBack.getDistance(DistanceUnit.CM) > 46){
+                rob.driveTrainMovement(1, Goal.movements.right);
+            }
+            rob.stopDrivetrain();
+
 
 
         }

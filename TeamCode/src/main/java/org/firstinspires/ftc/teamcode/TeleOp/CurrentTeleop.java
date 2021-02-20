@@ -2,7 +2,11 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Control.Goal;
 import org.firstinspires.ftc.teamcode.Control.TeleOpControl;
 
@@ -12,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Control.TeleOpControl;
 public class CurrentTeleop extends TeleOpControl {
     public static final double rotationSpeed = 0.4;
     public static boolean flywheelon = false;
+    Orientation angles;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -207,15 +213,8 @@ public class CurrentTeleop extends TeleOpControl {
                 }
 
               //  angle = (Math.atan((distanceFront - distanceBack) / 6.6142) * 180) / (3.1415);
-                 angle = rob.calculateDifferenceBetweenAngles(rob.getDirection(), IMUOrientB);
-                if (angle > 0){
-                    rob.turn((float) (Math.abs(angle)), Goal.turnside.cw, 0.9, Goal.axis.center);
-                }
-                else {
-                    rob.turn((float) (Math.abs(angle)), Goal.turnside.ccw, 0.9, Goal.axis.center);
-
-                }
-
+                angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                rob.driveTrainIMUSwingTurnMovement(0.1, Goal.movements.backward, 300, (int)angles.firstAngle, 0.2, Goal.turnside.cw);
 
                 while (true) {
                     if (rob.Back.getDistance((DistanceUnit.CM)) > 1000){
