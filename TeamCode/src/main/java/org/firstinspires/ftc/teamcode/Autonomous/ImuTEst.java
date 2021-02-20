@@ -18,47 +18,47 @@ public class ImuTEst extends AutonomousControl {
 
     Orientation angles;
 
-    String formatAngle(AngleUnit angleUnit, double angle) {
-        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
-    }
-
-    String formatDegrees(double degrees){
-        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
-    }
-
     @Override
 
     public void runOpMode() throws InterruptedException {
 
-        setup(runtime, Goal.setupType.imu);
+        setup(runtime, Goal.setupType.autonomous);
         telemetry.addLine("Start!");
+        int eUncertainity = 1;
+
         telemetry.update();
-        composeTelemetry();
 
         if (opModeIsActive()) {
-            rob.driveTrainEncoderMovement(.5,10, 10,10,Goal.movements.ccw);
 
-            telemetry.update();
+            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.cw);
+            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, 90, 0.02, Goal.turnside.cw);
 
-            sleep(10000);
-        }
-
-    }
-    void composeTelemetry() {
-        telemetry.addAction(new Runnable() {
-            @Override
-            public void run() {
+          /*  angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            while (angles.firstAngle < 10){
+                rob.driveTrainMovement(.2, Goal.movements.cw);
                 angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            }
-        });
+                telemetry.addData("orientiation thing", angles.firstAngle);
+                telemetry.update();
 
-        telemetry.addLine()
-                .addData("heading", new Func<String>() {
-                    @Override
-                    public String value() {
-                        return formatAngle(angles.angleUnit, angles.firstAngle);
-                    }
-                });
+            }
+rob.stopDrivetrain();
+            sleep(1000);
+
+            while (angles.firstAngle>0){
+                telemetry.addData("angle", angles.firstAngle);
+                angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                rob.driveTrainMovement(.2, Goal.movements.ccw);
+                telemetry.update();
+
+            }
+            rob.stopDrivetrain();
+           // checkOrientation();
+            sleep(1000);
+
+           */
+
+        }
     }
 }
 
