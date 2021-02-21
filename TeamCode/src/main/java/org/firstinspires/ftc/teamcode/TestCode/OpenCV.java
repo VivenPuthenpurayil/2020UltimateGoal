@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020 OpenFTC Team
  *
@@ -20,12 +19,12 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.TestCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
-import org.firstinspires.ftc.teamcode.Control.Goal;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -33,60 +32,49 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="TTTT Open CV", group = "basic")
-public class EasyOpenCV extends AutonomousControl
+@Autonomous(name="Open CV", group = "basic")
+public class OpenCV extends AutonomousControl
 {
     SkystoneDeterminationPipeline pipeline;
-
+    OpenCvWebcam webcam;
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        setup(runtime, Goal.setupType.openCV, Goal.setupType.autonomous);
-        telemetry.addLine("Start!");
-        telemetry.update();
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new SkystoneDeterminationPipeline();
-        rob.webcam.setPipeline(pipeline);
+        webcam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
         // out when the RC activity is in portrait. We do our actual image processing assuming
         // landscape orientation, though.
+        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
-        rob.webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                rob.webcam.startStreaming(320,240);
+                webcam.startStreaming(320,240);
             }
         });
-
-        double currTime = runtime.milliseconds();
 
         waitForStart();
 
         while (opModeIsActive())
         {
-            //rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
-                telemetry.addData("Analysis", pipeline.getAnalysis());
-                telemetry.addData("Position", pipeline.position);
-                telemetry.addData("Value", pipeline.value);
-                telemetry.update();
+            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Position", pipeline.position);
+            telemetry.update();
 
-                // Don't burn CPU cycles busy-looping in this sample
-                sleep(50);
-
-            if (pipeline.value == 4){
-
-            }else if(pipeline.value == 1){
-
-            }else{
-
-            }
-
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
         }
     }
 
@@ -102,7 +90,6 @@ public class EasyOpenCV extends AutonomousControl
             NONE
         }
 
-        public int value = 0;
         /*
          * Some color constants
          */
@@ -136,7 +123,7 @@ public class EasyOpenCV extends AutonomousControl
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        public volatile RingPosition position = RingPosition.FOUR;
+        private volatile RingPosition position = RingPosition.FOUR;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
@@ -173,13 +160,10 @@ public class EasyOpenCV extends AutonomousControl
             position = RingPosition.FOUR; // Record our analysis
             if(avg1 > FOUR_RING_THRESHOLD){
                 position = RingPosition.FOUR;
-                value = 4;
             }else if (avg1 > ONE_RING_THRESHOLD){
                 position = RingPosition.ONE;
-                value = 1;
             }else{
                 position = RingPosition.NONE;
-                value = 0;
             }
 
             Imgproc.rectangle(

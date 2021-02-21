@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.TestCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -6,24 +6,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.Control.Goal;
 
-
-@Autonomous(name="Test Arm", group = "basic")
-public class TestArm extends AutonomousControl {
+@Autonomous(name="Test Intake", group = "basic")
+public class TestIntake extends AutonomousControl {
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        setup(runtime, Goal.setupType.autonomous);
+        setup(runtime, Goal.setupType.collectionsystem);
         telemetry.addLine("Start!");
         telemetry.update();
 
         if (opModeIsActive()){
-
-            rob.encodeCoreHexMovement(0.75, 3, 2, 100, Goal.movements.clawIn, rob.claw);
-            //rob.pinch.setPosition(0.5);
-            sleep(1000);
-
+            rob.collection.setPower(1);
+            //sleep(5000);
+            sleep(30000);
         }
 
 

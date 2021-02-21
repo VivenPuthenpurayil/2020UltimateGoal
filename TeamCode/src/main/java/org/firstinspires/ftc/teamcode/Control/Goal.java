@@ -271,7 +271,7 @@ public class Goal {
 
     public void setupStorage() throws InterruptedException {
         whack = servo(whacker, Servo.Direction.FORWARD, 0, 1, 0);
-        lifter = servo(lifters, Servo.Direction.FORWARD, 0, 1 , .97);
+        lifter = servo(lifters, Servo.Direction.FORWARD, 0, 1 , 1);
         // teleop .98
         encoder(EncoderMode.OFF, fly);
     }
@@ -1004,5 +1004,137 @@ public class Goal {
         front, center, back
     }
 
+    public void driveTrainIMUSwingTurnMovement(double speed, movements movement, long waitAfter, int rotationDegrees, double rotationfactor, turnside rotDir) throws InterruptedException{
+        double[] signs = movement.getDirections();
+        rotationDegrees = 360- rotationDegrees;
+        double start = getDirection();
 
+        double end = (start + ((rotDir == turnside.cw) ? rotationDegrees : -rotationDegrees) + 360) % 360;
+        double[] speedValues = anyDirection(speed, -90 - start + getDirection());
+        double[] speeds= new double[4];
+        for (int i = 0; i < drivetrain.length; i++) {
+            if (i == 0 || i == 4) {
+                speeds[i] = (speedValues[1]);
+            } else {
+                speeds[i] = (speedValues[0]);
+            }
+        }
+
+
+        while ((((end - getDirection()) > 1 && turnside.cw == rotDir) || (turnside.cw != rotDir && end - getDirection() < -1)) && central.opModeIsActive()) {
+            central.telemetry.addData("IMU Inital: ", start);
+            central.telemetry.addData("IMU Final Projection: ", end);
+            central.telemetry.addData("IMU Orient: ", getDirection());
+
+            for (DcMotor motor: drivetrain){
+                int x = Arrays.asList(drivetrain).indexOf(motor);
+                motor.setPower(signs[x] * speeds[x] + rotationfactor * movements.valueOf(rotDir.name()).getDirections()[x]);
+                central.telemetry.addData("motor " + x, signs[x] * speeds[x] + rotationfactor * movements.valueOf(rotDir.name()).getDirections()[x]);
+
+            }
+            central.telemetry.update();
+        }
+
+        stopDrivetrain();
+        while (Math.abs(end - getDirection()) > 1 && central.opModeIsActive()){
+            driveTrainMovement(0.1, (rotDir == turnside.cw) ? movements.ccw : movements.cw);
+        }
+
+
+        stopDrivetrain();
+        central.sleep(waitAfter);
+    }
+    public void driveTrainIMUSwingTurnMovementOrig(double speed, movements movement, long waitAfter, int rotationDegrees, double rotationfactor, turnside rotDir) throws InterruptedException{
+        double[] signs = movement.getDirections();
+
+        double start = getDirection();
+
+        double end = (start + ((rotDir == turnside.cw) ? rotationDegrees : -rotationDegrees) + 360) % 360;
+
+
+
+        while ((((end - getDirection()) > 1 && turnside.cw == rotDir) || (turnside.cw != rotDir && end - getDirection() < -1)) && central.opModeIsActive()) {
+            double[] speedValues = anyDirection(speed, 90 + start - getDirection());
+            double[] speeds= new double[4];
+            for (int i = 0; i < drivetrain.length; i++) {
+                if (i == 0 || i == 3) {
+                    speeds[i] = (speedValues[0]);
+                } else {
+                    speeds[i] = (speedValues[1]);
+                }
+            }
+            central.telemetry.addData("IMU Inital: ", start);
+            central.telemetry.addData("IMU Final Projection: ", end);
+            central.telemetry.addData("IMU Orient: ", getDirection());
+
+            for (DcMotor motor: drivetrain){
+                int x = Arrays.asList(drivetrain).indexOf(motor);
+                motor.setPower(speeds[x] + rotationfactor * -movements.valueOf(rotDir.name()).getDirections()[x]);
+                central.telemetry.addData("motor " + x, speeds[x] + rotationfactor * -movements.valueOf(rotDir.name()).getDirections()[x]);
+
+            }
+            central.telemetry.update();
+        }
+
+        stopDrivetrain();
+        while (Math.abs(end - getDirection()) > 1 && central.opModeIsActive()){
+            driveTrainMovement(0.1, (rotDir == turnside.cw) ? movements.ccw : movements.cw);
+        }
+
+
+        stopDrivetrain();
+        central.sleep(waitAfter);
+    }
+
+    public void driveTrainIMUSuperStrafeMovement(double speed, movements movement, long waitAfter, int rotationDegrees, double rotationfactor, turnside rotDir) throws InterruptedException{
+        double[] signs = movement.getDirections();
+
+        double start = getDirection();
+
+        double end = (start + ((rotDir == turnside.cw) ? rotationDegrees : -rotationDegrees) + 360) % 360;
+        double[] speedValues = anyDirection(speed, 90 + start - getDirection());
+        double[] speeds= new double[4];
+        for (int i = 0; i < drivetrain.length; i++) {
+            if (i == 0 || i == 3) {
+                speeds[i] = (speedValues[0]);
+            } else {
+                speeds[i] = (speedValues[1]);
+            }
+        }
+
+        int p = 0;
+
+        boolean rotate = false;
+        while ((((end - getDirection()) > 1 && turnside.cw == rotDir) || (turnside.cw != rotDir && end - getDirection() < -1)) && central.opModeIsActive()) {
+            central.telemetry.addData("IMU Inital: ", start);
+            central.telemetry.addData("IMU Final Projection: ", end);
+            central.telemetry.addData("IMU Orient: ", getDirection());
+            if (p % 10 == 0){
+                rotate = !rotate;
+            }
+            for (DcMotor motor: drivetrain){
+                int x = Arrays.asList(drivetrain).indexOf(motor);
+                if (rotate) {
+                    motor.setPower(rotationfactor * movements.valueOf(rotDir.name()).getDirections()[x]);
+                    central.telemetry.addData("motor " + x, rotationfactor * movements.valueOf(rotDir.name()).getDirections()[x]);
+                }
+                else {
+                    motor.setPower(speeds[x]);
+                    central.telemetry.addData("motor " + x, speeds[x]);
+                }
+
+            }
+            central.telemetry.update();
+            p++;
+        }
+
+        stopDrivetrain();
+        while (Math.abs(end - getDirection()) > 1 && central.opModeIsActive()){
+            driveTrainMovement(0.1, (rotDir == turnside.cw) ? movements.ccw : movements.cw);
+        }
+
+
+        stopDrivetrain();
+        central.sleep(waitAfter);
+    }
 }
