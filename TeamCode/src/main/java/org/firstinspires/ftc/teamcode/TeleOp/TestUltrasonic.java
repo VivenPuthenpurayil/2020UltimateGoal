@@ -32,7 +32,6 @@ public class TestUltrasonic extends AutonomousControl {
             //telemetry.addData("raw ultrasonic left", rob.left.rawUltrasonic());
             //telemetry.addData("raw optical left", rob.left.rawOptical());
             //telemetry.addData("cm optical left", "%.2f cm", rob.left.cmOptical());
-            telemetry.addData("Inches left", "%.2f in", rob.leftFront.getDistance(DistanceUnit.INCH));
 
             //telemetry.addData("raw ultrasonic right", rob.right.rawUltrasonic());
             //telemetry.addData("raw optical right", rob.right.rawOptical());

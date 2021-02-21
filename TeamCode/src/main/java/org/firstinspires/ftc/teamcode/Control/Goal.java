@@ -213,11 +213,10 @@ public class Goal {
     public Servo whack;
     public Servo pinch;
     public Servo lifter;
-    public ModernRoboticsI2cRangeSensor leftFront, Back, rightFront, rightBack;
+    public ModernRoboticsI2cRangeSensor Back, rightFront, rightBack;
 
     public BNO055IMUImpl imu;
 
-    public ModernRoboticsI2cColorSensor color1;
 
 //    public ModernRoboticsI2cRangeSensor leftSense;
 //    public ModernRoboticsI2cRangeSensor frontSense;
@@ -302,10 +301,8 @@ public class Goal {
 
     public void setupUltra() throws InterruptedException {
         Back = ultrasonicSensor(Backs);
-        leftFront = ultrasonicSensor(leftFronts);
         rightBack = ultrasonicSensor(rightBacks);
         rightFront = ultrasonicSensor(rightFronts);
-        color1 = MRColor(colorSensorS);
     }
 
     public void setupOpenCV() throws InterruptedException {
