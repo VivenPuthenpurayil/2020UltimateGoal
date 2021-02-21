@@ -102,7 +102,7 @@ public class JanuaryAuton extends AutonomousControl
 
             sleep(100);
 
-            while(opModeIsActive() && runtime.milliseconds() < 6000) {
+            while(opModeIsActive() && runtime.milliseconds() < 5000) {
                 telemetry.addData("Analysis", pipeline.getAnalysis());
                 telemetry.addData("Position", pipeline.position);
                 telemetry.addData("Value", pipeline.value);
