@@ -41,9 +41,8 @@ public class AutoNoCV extends AutonomousControl {
             // 0 rings
 
 
-
             //move to red square
-            rob.driveTrainEncoderMovement(1,66,20,0,Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 66, 20, 0, Goal.movements.forward);
             // previous 63
 
             //drop wobble goal
@@ -56,21 +55,21 @@ public class AutoNoCV extends AutonomousControl {
 
             //move back to pick up second wobble goal
 
-            rob.driveTrainEncoderMovement(1,46,20,0,Goal.movements.backward);
+            rob.driveTrainEncoderMovement(1, 46, 20, 0, Goal.movements.backward);
 
             rob.lifter.setPosition(.87);
             sleep(200);
 
-            rob.driveTrainEncoderMovement(1,6,20,0,Goal.movements.left);
+            rob.driveTrainEncoderMovement(1, 6, 20, 0, Goal.movements.left);
 
             // turn to face second wobble goal
-            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.cw);
+            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.cw);
 
             rob.pinch.setPosition(0.8);
             sleep(500);
 
             // move to second wobble goal
-            rob.driveTrainEncoderMovement(.75,16,20,0,Goal.movements.forward);
+            rob.driveTrainEncoderMovement(.75, 16, 20, 0, Goal.movements.forward);
 
             // pick up second wobble goal
             sleep(250);
@@ -86,9 +85,9 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
 
             // move backwards to go back to red square
-            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.ccw);
-            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.right);
-            rob.driveTrainEncoderMovement(1,42,20,0,Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.ccw);
+            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.right);
+            rob.driveTrainEncoderMovement(1, 42, 20, 0, Goal.movements.forward);
 
             //drop wobble goal
             rob.pinch.setPosition(0.8);
@@ -110,33 +109,32 @@ public class AutoNoCV extends AutonomousControl {
 //            sleep(3000);
 //            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
 
-           rob.driveTrainEncoderMovement(1, 5, 20, 0, Goal.movements.backward);
-
+//           rob.driveTrainEncoderMovement(1, 5, 20, 0, Goal.movements.backward);
             // move to shooting position
 //            rob.driveTrainEncoderMovement(1, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
-            rob.driveTrainEncoderMovement(1, (46-rob.rightFront.getDistance(DistanceUnit.CM)) / 2.54, 20, 0, Goal.movements.left);
-            close_movement(0, 46);
-            rob.stopDrivetrain();
-            rob.driveTrainEncoderMovement(1,(rob.Back.getDistance(DistanceUnit.CM) - 150)/2.54,20,0,Goal.movements.backward);
-            close_movement(1, 150);
-            rob.stopDrivetrain();
+//            rob.driveTrainEncoderMovement(1, (46-rob.rightFront.getDistance(DistanceUnit.CM)) / 2.54, 20, 0, Goal.movements.left);
+//            close_movement(0, 46);
+//            rob.stopDrivetrain();
+//            rob.driveTrainEncoderMovement(1,(rob.Back.getDistance(DistanceUnit.CM) - 150)/2.54,20,0,Goal.movements.backward);
+//            close_movement(1, 150);
+//            rob.stopDrivetrain();
 
             // move backwards a bit so you dont hit the wobble goal
-//            rob.driveTrainEncoderMovement(1,7,20,0,Goal.movements.backward);
+            rob.driveTrainEncoderMovement(1, 7, 20, 0, Goal.movements.backward);
 
             // move towards wall
-            // rob.driveTrainEncoderMovement(1,9,20, 0, Goal.movements.right);
+            rob.driveTrainEncoderMovement(1, 9, 20, 0, Goal.movements.right);
 
             // move to the left, to align shots
-//            rob.driveTrainEncoderMovement(1,22 ,20,0,Goal.movements.left);
+            rob.driveTrainEncoderMovement(1, 22, 20, 0, Goal.movements.left);
 
             // move to right behind white line
-//            rob.driveTrainEncoderMovement(1,9,20,0,Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 9, 20, 0, Goal.movements.forward);
 
             // shoot your shots
 
             sleep(500);
-            for(int i = 0; i<=2; i++) {
+            for (int i = 0; i <= 2; i++) {
                 rob.fly.setPower(-0.73);
                 sleep(200);
                 //200
@@ -148,7 +146,7 @@ public class AutoNoCV extends AutonomousControl {
             }
 
             // move to Launch Line
-            rob.driveTrainEncoderMovement(1,8, 100, 100,Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 8, 100, 100, Goal.movements.forward);
 
 
         /*
