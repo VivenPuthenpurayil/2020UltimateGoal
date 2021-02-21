@@ -25,7 +25,7 @@ public class AutoNoCV extends AutonomousControl {
         telemetry.update();
 
         if (opModeIsActive()){
-            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+         /*   angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("angle", angles.firstAngle);
             telemetry.update();
             // pick up wobble goal
@@ -33,6 +33,15 @@ public class AutoNoCV extends AutonomousControl {
           sleep(750);
         rob.claw.setPower(0);
             sleep(250);
+
+          */
+            telemetry.addData("distance to wall", rob.rightFront.getDistance(DistanceUnit.CM));
+            telemetry.update();
+            sleep(3000);
+            rob.driveTrainEncoderMovement(.2,(rob.rightFront.getDistance(DistanceUnit.CM) - 46)/2.54,20,0,Goal.movements.right);
+            rob.stopDrivetrain();
+
+
 
 /* 0 rings
             //move to red square
@@ -46,7 +55,6 @@ public class AutoNoCV extends AutonomousControl {
             sleep(500);
             rob.claw.setPower(0);
             sleep(250);
-
 
             //move back to pick up second wobble goal
 
@@ -108,7 +116,6 @@ public class AutoNoCV extends AutonomousControl {
             // move to right behind white line
             rob.driveTrainEncoderMovement(1,9,20,0,Goal.movements.forward);
 
-
             // shoot your shots
 
             sleep(500);
@@ -126,7 +133,8 @@ public class AutoNoCV extends AutonomousControl {
             // move to Launch Line
             rob.driveTrainEncoderMovement(1,8, 100, 100,Goal.movements.forward);
             */
-
+/*
+            // 1 ring
             //move to red square
             rob.driveTrainEncoderMovement(1,90,20,0,Goal.movements.forward);
             rob.driveTrainEncoderMovement(1,20,20,0,Goal.movements.left);
@@ -181,17 +189,95 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
             telemetry.addData("back",rob.Back.getDistance(DistanceUnit.CM) );
 
-            while (rob.Back.getDistance(DistanceUnit.CM) > 153){
+//            while (rob.Back.getDistance(DistanceUnit.CM) > 100){
+//                rob.driveTrainMovement(1, Goal.movements.backward);
+//            }
+            double dist = 0;
+            do{
                 rob.driveTrainMovement(1, Goal.movements.backward);
+
+                dist = rob.Back.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+
             }
+            while(dist >1000 || dist > 153 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
             rob.stopDrivetrain();
             angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            rob.driveTrainIMUSwingTurnMovement(0.1, Goal.movements.backward, 300, (int)angles.firstAngle, 0.2, Goal.turnside.cw);
-            while(rob.rightBack.getDistance(DistanceUnit.CM) > 46){
-                rob.driveTrainMovement(1, Goal.movements.right);
-            }
-            rob.stopDrivetrain();
+            rob.driveTrainIMUSwingTurnMovement(0.1, Goal.movements.backward, 300, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
 
+//            while(rob.rightBack.getDistance(DistanceUnit.CM) > 20){
+//            }
+            do{
+                rob.driveTrainMovement(1, Goal.movements.right);
+
+                dist = rob.Back.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+
+            }
+            while(dist >1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+            rob.stopDrivetrain();
+ */
+
+            /* 4 rings
+            //move to red square
+            rob.driveTrainEncoderMovement(1,102,20,0,Goal.movements.forward);
+
+            //drop wobble goal
+            rob.pinch.setPosition(0.8);
+            sleep(500);
+            rob.claw.setPower(0.3);
+            sleep(500);
+            rob.claw.setPower(0);
+            sleep(250);
+
+            //move back to pick up second wobble goal
+
+            rob.driveTrainEncoderMovement(1,82,20,0,Goal.movements.backward);
+
+            rob.lifter.setPosition(.84);
+            sleep(200);
+
+            rob.driveTrainEncoderMovement(1,6,20,0,Goal.movements.left);
+
+            // turn to face second wobble goal
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.cw);
+
+            rob.pinch.setPosition(0.8);
+            sleep(500);
+
+            // move to second wobble goal
+            rob.driveTrainEncoderMovement(.75,16,20,0,Goal.movements.forward);
+
+            // pick up second wobble goal
+            sleep(250);
+            rob.claw.setPower(-0.3);
+            sleep(300);
+            rob.claw.setPower(0);
+            sleep(500);
+            rob.pinch.setPosition(0);
+            sleep(400);
+            rob.claw.setPower(-0.4);
+            sleep(350);
+            rob.claw.setPower(0);
+            sleep(250);
+
+            // move backwards to go back to red square
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.ccw);
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.right);
+            rob.driveTrainEncoderMovement(1,82,20,0,Goal.movements.forward);
+
+            //drop wobble goal
+            rob.pinch.setPosition(0.8);
+            sleep(250);
+            rob.claw.setPower(0.3);
+            sleep(500);
+            rob.claw.setPower(0);
+            sleep(250);
+
+             */
 
 
         }
