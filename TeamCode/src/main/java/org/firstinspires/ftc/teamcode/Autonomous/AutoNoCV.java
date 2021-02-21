@@ -25,8 +25,13 @@ public class AutoNoCV extends AutonomousControl {
         telemetry.update();
 
         if (opModeIsActive()) {
-         /*   angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+           sleep(3000);
+            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("angle", angles.firstAngle);
+            telemetry.update();
+            sleep(4000);
+            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
+            /*
             telemetry.update();
             // pick up wobble goal
              rob.claw.setPower(-0.4);
@@ -35,22 +40,22 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
 
           */
-            telemetry.addData("distance to wall", rob.rightFront.getDistance(DistanceUnit.CM));
+          /*  telemetry.addData("distance to wall", rob.rightFront.getDistance(DistanceUnit.CM));
             telemetry.update();
             sleep(3000);
             rob.driveTrainEncoderMovement(.2, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
             sleep(200);
 
             double dist = rob.rightBack.getDistance(DistanceUnit.CM);
-            while (dist > 1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive()) {
+           while (dist > 1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive()) {
                 rob.driveTrainMovement(0.1, Goal.movements.right);
                 dist = rob.rightBack.getDistance(DistanceUnit.CM);
                 telemetry.addData("cm Back", "%.2f cm", dist);
                 telemetry.update();
-            }
+            }*/
 
             rob.stopDrivetrain();
-            rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 153)/2.54,20,0,Goal.movements.backward);
+          //  rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 153)/2.54,20,0,Goal.movements.backward);
 
 
 
