@@ -302,10 +302,8 @@ public class Goal {
 
     public void setupUltra() throws InterruptedException {
         Back = ultrasonicSensor(Backs);
-        leftFront = ultrasonicSensor(leftFronts);
         rightBack = ultrasonicSensor(rightBacks);
         rightFront = ultrasonicSensor(rightFronts);
-        color1 = MRColor(colorSensorS);
     }
 
     public void setupOpenCV() throws InterruptedException {

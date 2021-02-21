@@ -24,7 +24,7 @@ public class AutoNoCV extends AutonomousControl {
         telemetry.addLine("Start!");
         telemetry.update();
 
-        if (opModeIsActive()){
+        if (opModeIsActive()) {
          /*   angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("angle", angles.firstAngle);
             telemetry.update();
@@ -38,8 +38,20 @@ public class AutoNoCV extends AutonomousControl {
             telemetry.addData("distance to wall", rob.rightFront.getDistance(DistanceUnit.CM));
             telemetry.update();
             sleep(3000);
-            rob.driveTrainEncoderMovement(.2,(rob.rightFront.getDistance(DistanceUnit.CM) - 46)/2.54,20,0,Goal.movements.right);
+            rob.driveTrainEncoderMovement(.2, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
+            sleep(200);
+
+            double dist = rob.rightBack.getDistance(DistanceUnit.CM);
+            while (dist > 1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive()) {
+                rob.driveTrainMovement(0.1, Goal.movements.right);
+                dist = rob.rightBack.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+            }
+
             rob.stopDrivetrain();
+            rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 153)/2.54,20,0,Goal.movements.backward);
+
 
 
 

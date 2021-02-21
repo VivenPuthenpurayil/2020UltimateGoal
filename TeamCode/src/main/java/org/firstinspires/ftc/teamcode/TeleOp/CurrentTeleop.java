@@ -155,7 +155,7 @@ public class CurrentTeleop extends TeleOpControl {
                 rob.motorFR.setPower(0);
                 rob.motorBR.setPower(0);
                 sleep(250);
-                rob.lifter.setPosition(.84);
+                rob.lifter.setPosition(.87);
                 sleep(500);
                 for (int i = 0; i <= 2; i++) {
 
@@ -172,7 +172,7 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.whack.setPosition(0.5);
+                    rob.whack.setPosition(0.4);
                     sleep(1000);
 
                     if(gamepad2.b){
