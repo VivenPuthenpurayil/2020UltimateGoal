@@ -4,6 +4,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public abstract class AutonomousControl extends Central {
 
+    public void dropgoal() {
+        //drop wobble goal
+        rob.pinch.setPosition(0.8);
+        sleep(200);
+        rob.claw.setPower(0.4);
+        sleep(200);
+        rob.claw.setPower(0);
+        sleep(100);
+    }
+
+    public void pickupgoal() {
+        sleep(100);
+        rob.pinch.setPosition(0);
+        sleep(400);
+        rob.claw.setPower(-0.4);
+        sleep(250);
+        rob.claw.setPower(0);
+        sleep(100);
+    }
+
     public boolean outlier(){
         if(rob.rightBack.getDistance(DistanceUnit.CM) >= 1000 ||
        rob.rightFront.getDistance(DistanceUnit.CM) >= 1000 ||

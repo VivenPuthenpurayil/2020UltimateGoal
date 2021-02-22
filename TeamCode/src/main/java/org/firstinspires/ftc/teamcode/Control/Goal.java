@@ -766,7 +766,7 @@ public class Goal {
     }
 
     // IMU Movements
-    public void turn(float target, turnside direction, double speed, axis rotation_Axis) throws InterruptedException {
+    public void turn(float target, turnside direction, double speed, axis rotation_Axis) throws InterruptedException{
 
         central.telemetry.addData("IMU State: ", imu.getSystemStatus());
         central.telemetry.update();
@@ -929,8 +929,8 @@ public class Goal {
         bl(1, 0, 0, -1),
         tl(0, 1, -1, 0),
         tr(-1, 0, 0, 1),
-        cw(1, 1, 1, 1),
-        ccw(-1, -1, -1, -1),
+        ccw(1, 1, 1, 1),
+        cw(-1, -1, -1, -1),
         cwback(-1, -1, 0, 0),
         ccwback(1, 1, 0, 0),
         cwfront(0, 0, -1, -1),
@@ -1137,4 +1137,6 @@ public class Goal {
         stopDrivetrain();
         central.sleep(waitAfter);
     }
+
+
 }
