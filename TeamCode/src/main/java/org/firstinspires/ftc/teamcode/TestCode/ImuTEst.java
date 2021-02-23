@@ -28,10 +28,14 @@ public class ImuTEst extends AutonomousControl {
         telemetry.update();
 
         if (opModeIsActive()) {
-
+            rob.driveTrainEncoderMovement(1, 15, 20, 0, Goal.movements.ccw);
             angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.cw);
-            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, 90, 0.02, Goal.turnside.cw);
+            rob.teleturn((float) (Math.abs(angles.firstAngle)), Goal.turnside.cw, 0.9, Goal.axis.center);
+
+
+
+
+            //  rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, 90, 0.02, Goal.turnside.cw);
 
 
         }
