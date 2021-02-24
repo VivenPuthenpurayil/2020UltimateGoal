@@ -24,7 +24,11 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.Control.Goal;
 import org.opencv.core.Core;
@@ -40,7 +44,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class JanuaryAuton extends AutonomousControl
 {
     SkystoneDeterminationPipeline pipeline;
-
+    Orientation angles;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -74,6 +78,8 @@ public class JanuaryAuton extends AutonomousControl
         if (opModeIsActive())
         {
             double dist = rob.Back.getDistance(DistanceUnit.INCH);
+            double distanceBack = rob.rightBack.getDistance(DistanceUnit.CM);
+            double distanceFront = rob.rightFront.getDistance(DistanceUnit.CM);
 
 
             do{
@@ -84,25 +90,13 @@ public class JanuaryAuton extends AutonomousControl
                 telemetry.update();
 
             }
-            while(dist >1000 || dist < 31 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
-
-            rob.stopDrivetrain();
-
-            do{
-                rob.driveTrainMovement(0.6, Goal.movements.left);
-
-                dist = rob.rightFront.getDistance(DistanceUnit.INCH);
-                telemetry.addData("cm front", "%.2f cm", dist);
-                telemetry.update();
-
-            }
-            while(dist >1000 || dist < 7 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+            while(dist >1000 || dist < 34 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
 
             rob.stopDrivetrain();
 
             sleep(100);
 
-            while(opModeIsActive() && runtime.milliseconds() < 6000) {
+            while(opModeIsActive() && runtime.milliseconds() < 3000) {
                 telemetry.addData("Analysis", pipeline.getAnalysis());
                 telemetry.addData("Position", pipeline.position);
                 telemetry.addData("Value", pipeline.value);
@@ -113,10 +107,261 @@ public class JanuaryAuton extends AutonomousControl
             }
             if (pipeline.value == 4){
 
-
             }else if(pipeline.value == 1){
 
+                //dropping off the first goal
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 60 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.left);
+
+                    dist = rob.rightFront.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm front", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 20 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 80 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                dropgoal();
+
+                sleep(200);
+
+                //go to pick up second goal
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 60 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                sleep(200);
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.right);
+
+                    dist = rob.rightFront.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm front", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 10 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                sleep(200);
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 20 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                rob.driveTrainEncoderMovement(0.6, 23, 5, 0, Goal.movements.ccw);
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 24 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                pickupgoal();
+
+                /*
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 24 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                pickupgoal();
+
+                /*
+                //getting the second goal
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 20 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                rob.driveTrainEncoderMovement(0.6, 23, 5, 0, Goal.movements.ccw);
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 24 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                pickupgoal();
+
+                //taking second goal to spot
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 8 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                rob.driveTrainEncoderMovement(0.6, 23, 5, 0, Goal.movements.cw);
+
+                do{
+                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 50 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                dropgoal();
+
+                 */
+
             }else{
+                //dropping off the first goal
+                do{
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 62 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                dropgoal();
+
+                //getting the second goal
+
+                do{
+                    rob.driveTrainMovement(0.75, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 20 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                rob.driveTrainEncoderMovement(0.75, 23, 5, 0, Goal.movements.ccw);
+
+                do{
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 24 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                pickupgoal();
+
+                //taking second goal to spot
+
+                do{
+                    rob.driveTrainMovement(0.75, Goal.movements.backward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist > 8 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                rob.driveTrainEncoderMovement(0.75, 23, 5, 0, Goal.movements.cw);
+
+                do{
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
+
+                    dist = rob.Back.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", dist);
+                    telemetry.update();
+
+                }
+                while(dist >1000 || dist < 52 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                dropgoal();
 
             }
 

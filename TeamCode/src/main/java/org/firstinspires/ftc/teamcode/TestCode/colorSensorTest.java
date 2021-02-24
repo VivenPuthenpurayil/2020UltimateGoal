@@ -16,6 +16,7 @@ public class colorSensorTest extends AutonomousControl {
         telemetry.update();
 
         while (opModeIsActive()) {
+            /*
             telemetry.addData("Red  ", rob.color1.red());
             telemetry.addData("Green", rob.color1.green());
             telemetry.addData("Blue ", rob.color1.blue());
@@ -24,9 +25,11 @@ public class colorSensorTest extends AutonomousControl {
             while ((rob.color1.red() < 40  && rob.color1.green() < 40 && rob.color1.blue() < 40) || (rob.color1.red() > 50 && rob.color1.green() < 40 && rob.color1.blue() < 40)){
                 rob.driveTrainMovement(1, Goal.movements.forward);
 
+             */
+
             }
 
 
         }
     }
-}
+

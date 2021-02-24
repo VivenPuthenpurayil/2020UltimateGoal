@@ -213,11 +213,10 @@ public class Goal {
     public Servo whack;
     public Servo pinch;
     public Servo lifter;
-    public ModernRoboticsI2cRangeSensor leftFront, Back, rightFront, rightBack;
+    public ModernRoboticsI2cRangeSensor Back, rightFront, rightBack;
 
     public BNO055IMUImpl imu;
 
-    public ModernRoboticsI2cColorSensor color1;
 
 //    public ModernRoboticsI2cRangeSensor leftSense;
 //    public ModernRoboticsI2cRangeSensor frontSense;
@@ -234,6 +233,8 @@ public class Goal {
     public Orientation current;
     public static boolean isnotstopped;
     public float initorient;
+
+    public Orientation angles;
 
     public void setupIMU() throws InterruptedException {
         imuparameters.angleUnit = BNO055IMUImpl.AngleUnit.DEGREES;
@@ -767,7 +768,7 @@ public class Goal {
     }
 
     // IMU Movements
-    public void turn(float target, turnside direction, double speed, axis rotation_Axis) throws InterruptedException {
+    public void turn(float target, turnside direction, double speed, axis rotation_Axis) throws InterruptedException{
 
         central.telemetry.addData("IMU State: ", imu.getSystemStatus());
         central.telemetry.update();
@@ -1014,8 +1015,8 @@ public class Goal {
         bl(1, 0, 0, -1),
         tl(0, 1, -1, 0),
         tr(-1, 0, 0, 1),
-        cw(1, 1, 1, 1),
-        ccw(-1, -1, -1, -1),
+        ccw(1, 1, 1, 1),
+        cw(-1, -1, -1, -1),
         cwback(-1, -1, 0, 0),
         ccwback(1, 1, 0, 0),
         cwfront(0, 0, -1, -1),
@@ -1222,4 +1223,90 @@ public class Goal {
         stopDrivetrain();
         central.sleep(waitAfter);
     }
+
+    public void teleturn(float target, turnside direction, double speed, axis rotation_Axis) throws InterruptedException{
+
+        central.telemetry.addData("IMU State: ", imu.getSystemStatus());
+        central.telemetry.update();
+
+        double start = getDirection();
+
+        double end = (start + ((direction == turnside.cw) ? target : -target) + 360) % 360;
+
+       /* isnotstopped = true;
+        try {
+            switch (rotation_Axis) {
+                case center:
+                    driveTrainMovement(speed, (direction == turnside.cw) ? movements.cw : movements.ccw);
+                    break;
+                case back:
+                    driveTrainMovement(speed, (direction == turnside.cw) ? movements.cwback : movements.ccwback);
+                    break;
+                case front:
+                    driveTrainMovement(speed, (direction == turnside.cw) ? movements.cwfront : movements.ccwfront);
+                    break;
+            }
+        } catch (InterruptedException e) {
+            isnotstopped = false;
+        }
+
+        while ((((end - getDirection()) > 1 && turnside.cw == direction) || (turnside.cw != direction && end - getDirection() < -1)) && central.opModeIsActive() && isnotstopped) {
+            central.telemetry.addData("IMU Inital: ", start);
+            central.telemetry.addData("IMU Final Projection: ", end);
+            central.telemetry.addData("IMU Orient: ", getDirection());
+            central.telemetry.update();
+        }
+        try {
+            stopDrivetrain();
+        } catch (InterruptedException e) {
+        }
+
+
+        */
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        if (angles.firstAngle > 0) {
+            while (angles.firstAngle > -1) {
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                driveTrainMovement(.5, Goal.movements.ccw);
+            }
+        }
+        if (angles.firstAngle < 0) {
+            while (angles.firstAngle < 1) {
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                driveTrainMovement(.5, Goal.movements.cw);
+            }
+        }
+
+        double r = end-getDirection();
+        boolean x;
+        if(r>1){
+            x=true;
+        }
+        else{
+            x=false;
+        }
+        boolean y = false;
+
+        while (Math.abs(end - getDirection()) > 1 && central.opModeIsActive()){
+            r = end-getDirection();
+            if(r>1){
+                y=true;
+            }
+            else{
+                y=false;
+            }
+            if(x!=y){
+                break;
+            }
+            central.telemetry.addData("IMU Orient: ", getDirection());
+            central.telemetry.addData("IMU Target: ", target);
+            central.telemetry.update();
+            driveTrainMovement(.05, (direction == turnside.cw) ? movements.ccw : movements.cw);
+
+        }
+        stopDrivetrain();
+
+    }
+
 }

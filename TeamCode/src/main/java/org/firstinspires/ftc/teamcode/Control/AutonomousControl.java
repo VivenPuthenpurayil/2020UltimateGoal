@@ -14,6 +14,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public abstract class AutonomousControl extends Central {
 
+    public void dropgoal() {
+        //drop wobble goal
+        rob.claw.setPower(0.4);
+        sleep(200);
+        rob.claw.setPower(0);
+        sleep(100);
+        rob.pinch.setPosition(0.8);
+        sleep(200);
+    }
+
+    public void pickupgoal() {
+        sleep(400);
+        rob.claw.setPower(-0.4);
+        sleep(250);
+        rob.claw.setPower(0);
+        sleep(100);
+        rob.pinch.setPosition(0);
+        sleep(100);
+    }
+
     public boolean outlier(){
         return rob.rightBack.getDistance(DistanceUnit.CM) >= 1000 ||
                 rob.rightFront.getDistance(DistanceUnit.CM) >= 1000 ||
