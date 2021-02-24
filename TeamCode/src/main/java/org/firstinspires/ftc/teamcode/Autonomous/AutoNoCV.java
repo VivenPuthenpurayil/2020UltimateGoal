@@ -26,7 +26,11 @@ public class AutoNoCV extends AutonomousControl {
 
         if (opModeIsActive()) {
 
-            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//            zero();
+            one();
+//            four();
+
+           // angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             /*
             telemetry.update();
@@ -38,8 +42,8 @@ public class AutoNoCV extends AutonomousControl {
 
           */
 
+    /*
             // 0 rings
-
 
             //move to red square
             rob.driveTrainEncoderMovement(1, 66, 20, 0, Goal.movements.forward);
@@ -147,7 +151,7 @@ public class AutoNoCV extends AutonomousControl {
 
             // move to Launch Line
             rob.driveTrainEncoderMovement(1, 8, 100, 100, Goal.movements.forward);
-
+*/
 
         /*
             // 1 ring
