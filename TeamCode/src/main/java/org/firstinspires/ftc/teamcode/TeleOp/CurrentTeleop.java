@@ -146,7 +146,7 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (flywheelon) {
-                rob.fly.setPower(-0.7);
+                rob.fly.setPower(-0.675);
             }
 
             if(gamepad2.a) {
@@ -157,15 +157,46 @@ public class CurrentTeleop extends TeleOpControl {
                 sleep(250);
                 rob.lifter.setPosition(.86);
                 sleep(500);
-                for (int i = 0; i <= 2; i++) {
+                for (int i = 0; i <= 0; i++) {
 
                     if(gamepad2.b){
                         emergencystopDriver2();
                         break;
                     }
 
-                    rob.fly.setPower(-0.7);
-                    sleep(100);
+                    rob.fly.setPower(-0.65);
+                    sleep(500);
+
+                    if(gamepad2.b){
+                        emergencystopDriver2();
+                        break;
+                    }
+
+                    rob.whack.setPosition(0.45);
+                    sleep(500);
+
+                    if(gamepad2.b){
+                        emergencystopDriver2();
+                        break;
+                    }
+
+                    rob.whack.setPosition(0);
+                    sleep(500);
+
+                    if(gamepad2.b){
+                        emergencystopDriver2();
+                        break;
+                    }
+                }
+                for (int i = 0; i <= 1; i++) {
+
+                    if(gamepad2.b){
+                        emergencystopDriver2();
+                        break;
+                    }
+
+                    rob.fly.setPower(-0.675);
+                    sleep(500);
 
                     if(gamepad2.b){
                         emergencystopDriver2();
@@ -218,11 +249,11 @@ public class CurrentTeleop extends TeleOpControl {
                 }
                 angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                rob.teleturn((float) (Math.abs(angles.firstAngle)), Goal.turnside.cw, 0.9, Goal.axis.center);
+                //rob.teleturn((float) (Math.abs(angles.firstAngle)), Goal.turnside.cw, 0.9, Goal.axis.center);
 
-                rob.driveTrainEncoderMovement(1,(145 - rob.Back.getDistance((DistanceUnit.CM)))/2.54,20,0,Goal.movements.forward);
+                rob.driveTrainEncoderMovement(1,(131 - rob.Back.getDistance((DistanceUnit.CM)))/2.54,20,0,Goal.movements.forward);
                 rob.stopDrivetrain();
-                rob.driveTrainEncoderMovement(1,((rob.rightFront.getDistance((DistanceUnit.CM))-53)/2.54),20,0,Goal.movements.right);
+                rob.driveTrainEncoderMovement(1,((rob.rightFront.getDistance((DistanceUnit.CM))-45)/2.54),20,0,Goal.movements.right);
                 rob.stopDrivetrain();
                 move_to_pos = false;
             }
