@@ -24,7 +24,11 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.Control.Goal;
 import org.opencv.core.Core;
@@ -40,7 +44,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class JanuaryAuton extends AutonomousControl
 {
     SkystoneDeterminationPipeline pipeline;
-
+    Orientation angles;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -74,6 +78,8 @@ public class JanuaryAuton extends AutonomousControl
         if (opModeIsActive())
         {
             double dist = rob.Back.getDistance(DistanceUnit.INCH);
+            double distanceBack = rob.rightBack.getDistance(DistanceUnit.CM);
+            double distanceFront = rob.rightFront.getDistance(DistanceUnit.CM);
 
 
             do{
@@ -284,14 +290,14 @@ public class JanuaryAuton extends AutonomousControl
             }else{
                 //dropping off the first goal
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
 
                     dist = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", dist);
                     telemetry.update();
 
                 }
-                while(dist >1000 || dist < 60 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+                while(dist >1000 || dist < 62 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
 
                 rob.stopDrivetrain();
 
@@ -300,7 +306,7 @@ public class JanuaryAuton extends AutonomousControl
                 //getting the second goal
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+                    rob.driveTrainMovement(0.75, Goal.movements.backward);
 
                     dist = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", dist);
@@ -311,10 +317,10 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                rob.driveTrainEncoderMovement(0.6, 23, 5, 0, Goal.movements.ccw);
+                rob.driveTrainEncoderMovement(0.75, 23, 5, 0, Goal.movements.ccw);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
 
                     dist = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", dist);
@@ -330,7 +336,7 @@ public class JanuaryAuton extends AutonomousControl
                 //taking second goal to spot
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+                    rob.driveTrainMovement(0.75, Goal.movements.backward);
 
                     dist = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", dist);
@@ -341,17 +347,17 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                rob.driveTrainEncoderMovement(0.6, 23, 5, 0, Goal.movements.cw);
+                rob.driveTrainEncoderMovement(0.75, 23, 5, 0, Goal.movements.cw);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(0.75, Goal.movements.forward);
 
                     dist = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", dist);
                     telemetry.update();
 
                 }
-                while(dist >1000 || dist < 50 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+                while(dist >1000 || dist < 52 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
 
                 rob.stopDrivetrain();
 
