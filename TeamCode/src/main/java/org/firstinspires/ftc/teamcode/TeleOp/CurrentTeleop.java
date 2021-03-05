@@ -136,7 +136,7 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (gamepad1.y) {
-                // flywheelon = true;
+                // flywheelon = true; h
                 move_to_pos = true;
 
             }
@@ -146,7 +146,7 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (flywheelon) {
-                rob.fly.setPower(-0.675);
+                rob.fly.setPower(-0.625);
             }
 
             if(gamepad2.a) {
@@ -157,14 +157,15 @@ public class CurrentTeleop extends TeleOpControl {
                 sleep(250);
                 rob.lifter.setPosition(.86);
                 sleep(500);
-                for (int i = 0; i <= 0; i++) {
+                for (int i = 0; i <= 2; i++) {
 
                     if(gamepad2.b){
                         emergencystopDriver2();
                         break;
                     }
 
-                    rob.fly.setPower(-0.65);
+                    rob.fly.setPower(-0.625-(i*0.02));
+//                    sleep(500);
                     sleep(500);
 
                     if(gamepad2.b){
@@ -188,37 +189,37 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
                 }
-                for (int i = 0; i <= 1; i++) {
-
-                    if(gamepad2.b){
-                        emergencystopDriver2();
-                        break;
-                    }
-
-                    rob.fly.setPower(-0.675);
-                    sleep(500);
-
-                    if(gamepad2.b){
-                        emergencystopDriver2();
-                        break;
-                    }
-
-                    rob.whack.setPosition(0.45);
-                    sleep(500);
-
-                    if(gamepad2.b){
-                        emergencystopDriver2();
-                        break;
-                    }
-
-                    rob.whack.setPosition(0);
-                    sleep(500);
-
-                    if(gamepad2.b){
-                        emergencystopDriver2();
-                        break;
-                    }
-                }
+//                for (int i = 0; i <= 1; i++) {
+//
+//                    if(gamepad2.b){
+//                        emergencystopDriver2();
+//                        break;
+//                    }
+//
+//                    rob.fly.setPower(-0.6);
+//                    sleep(500);
+//
+//                    if(gamepad2.b){
+//                        emergencystopDriver2();
+//                        break;
+//                    }
+//
+//                    rob.whack.setPosition(0.45);
+//                    sleep(500);
+//
+//                    if(gamepad2.b){
+//                        emergencystopDriver2();
+//                        break;
+//                    }
+//
+//                    rob.whack.setPosition(0);
+//                    sleep(500);
+//
+//                    if(gamepad2.b){
+//                        emergencystopDriver2();
+//                        break;
+//                    }
+//                }
                 rob.fly.setPower(0);
                 flywheelon = false;
                 rob.lifter.setPosition(.98);
