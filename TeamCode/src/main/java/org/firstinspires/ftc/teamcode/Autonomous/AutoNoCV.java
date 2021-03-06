@@ -294,6 +294,7 @@ public class AutoNoCV extends AutonomousControl {
         }
     }
 
+    /*
     public void close_movement(int dir, double d) throws InterruptedException {
         double speed = 0.2;
         if (dir == 0) {
@@ -326,4 +327,6 @@ public class AutoNoCV extends AutonomousControl {
             }
         }
     }
+
+     */
 }

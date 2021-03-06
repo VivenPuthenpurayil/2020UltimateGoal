@@ -39,7 +39,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.teamcode.Control.Constants.Backs;
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_COREHEXMOTOR_INCH;
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_GOBUILDA435RPM_INCH;
 import static org.firstinspires.ftc.teamcode.Control.Constants.claws;
@@ -54,15 +53,17 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.motorBRS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorFLS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorFRS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.pincher;
-import static org.firstinspires.ftc.teamcode.Control.Constants.rightBacks;
-import static org.firstinspires.ftc.teamcode.Control.Constants.rightFronts;
+import static org.firstinspires.ftc.teamcode.Control.Constants.Backs;
+import static org.firstinspires.ftc.teamcode.Control.Constants.Rights;
+import static org.firstinspires.ftc.teamcode.Control.Constants.Fronts;
+import static org.firstinspires.ftc.teamcode.Control.Constants.Lefts;
+//import static org.firstinspires.ftc.teamcode.Control.Constants.rightBacks;
+//import static org.firstinspires.ftc.teamcode.Control.Constants.rightFronts;
 import static org.firstinspires.ftc.teamcode.Control.Constants.whacker;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.backSenseS;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.leftSenseS;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.frontSenseS;
-//import static org.firstinspires.ftc.teamcode.Control.Constants.rightfrontSenseS;
-//import static org.firstinspires.ftc.teamcode.Control.Constants.rightbackSenseS;
-//import static org.firstinspires.ftc.teamcode.Control.Constants.backSenseS;
+//import static org.firstinspires.ftc.teamcode.Control.Constants.rightSenseS;
 
 
 public class Goal {
@@ -213,7 +214,7 @@ public class Goal {
     public Servo whack;
     public Servo pinch;
     public Servo lifter;
-    public ModernRoboticsI2cRangeSensor Back, rightFront, rightBack;
+    public ModernRoboticsI2cRangeSensor Back, Right, Front, Left;
 
     public BNO055IMUImpl imu;
 
@@ -301,8 +302,9 @@ public class Goal {
 
     public void setupUltra() throws InterruptedException {
         Back = ultrasonicSensor(Backs);
-        rightBack = ultrasonicSensor(rightBacks);
-        rightFront = ultrasonicSensor(rightFronts);
+        Right = ultrasonicSensor(Rights);
+        Front = ultrasonicSensor(Fronts);
+        Left = ultrasonicSensor(Lefts);
     }
 
     public void setupOpenCV() throws InterruptedException {

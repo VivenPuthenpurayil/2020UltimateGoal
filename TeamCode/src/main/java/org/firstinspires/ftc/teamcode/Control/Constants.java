@@ -80,7 +80,10 @@ public class Constants {
 
     public static final String leftFronts = "leftFront";
     public static final String Backs = "Back";
-    public static final String rightFronts = "rightFront";
-    public static final String rightBacks = "rightBack";
+//    public static final String rightFronts = "rightFront";
+//    public static final String rightBacks = "rightBack";
+    public static final String Rights = "Right";
+    public static final String Lefts = "Left";
+    public static final String Fronts = "Front";
     public static final String colorSensorS = "color";
 }

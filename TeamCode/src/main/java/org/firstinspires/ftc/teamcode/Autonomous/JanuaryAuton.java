@@ -78,8 +78,8 @@ public class JanuaryAuton extends AutonomousControl
         if (opModeIsActive())
         {
             double dist = rob.Back.getDistance(DistanceUnit.INCH);
-            double distanceBack = rob.rightBack.getDistance(DistanceUnit.CM);
-            double distanceFront = rob.rightFront.getDistance(DistanceUnit.CM);
+            double distanceBack = rob.Right.getDistance(DistanceUnit.CM);
+            double distanceFront = rob.Right.getDistance(DistanceUnit.CM);
 
 
             do{
@@ -125,7 +125,7 @@ public class JanuaryAuton extends AutonomousControl
                 do{
                     rob.driveTrainMovement(0.6, Goal.movements.left);
 
-                    dist = rob.rightFront.getDistance(DistanceUnit.INCH);
+                    dist = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm front", "%.2f cm", dist);
                     telemetry.update();
 
@@ -146,7 +146,7 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                dropgoal();
+               // dropgoal();
 
                 sleep(200);
 
@@ -169,7 +169,7 @@ public class JanuaryAuton extends AutonomousControl
                 do{
                     rob.driveTrainMovement(0.6, Goal.movements.right);
 
-                    dist = rob.rightFront.getDistance(DistanceUnit.INCH);
+                    dist = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm front", "%.2f cm", dist);
                     telemetry.update();
 
@@ -206,7 +206,7 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                pickupgoal();
+             //   pickupgoal();
 
                 /*
 
@@ -301,7 +301,7 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                dropgoal();
+               // dropgoal();
 
                 //getting the second goal
 
@@ -331,7 +331,7 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                pickupgoal();
+               // pickupgoal();
 
                 //taking second goal to spot
 
@@ -361,7 +361,7 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                dropgoal();
+              //  dropgoal();
 
             }
 
