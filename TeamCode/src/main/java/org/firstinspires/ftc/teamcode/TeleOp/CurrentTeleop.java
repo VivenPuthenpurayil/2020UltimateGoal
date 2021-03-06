@@ -33,8 +33,7 @@ public class CurrentTeleop extends TeleOpControl {
 
         while (opModeIsActive()){
             double IMUOrientB = -1;
-            double distanceBack = rob.rightBack.getDistance(DistanceUnit.CM);
-            double distanceFront = rob.rightFront.getDistance(DistanceUnit.CM);
+            double distanceRight = rob.Right.getDistance(DistanceUnit.CM);
             telemetry.addData("back", "%.2f cm", rob.Back.getDistance(DistanceUnit.CM));
             telemetry.addData("angle", "%.2f",IMUOrientB);
             IMUOrientB = rob.getDirection();
@@ -245,7 +244,7 @@ public class CurrentTeleop extends TeleOpControl {
 
 
             if (move_to_pos) {
-                if (distanceBack > 1000 || distanceFront > 1000) {
+                if (distanceRight > 1000) {
                     continue;
                 }
                 angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -254,7 +253,7 @@ public class CurrentTeleop extends TeleOpControl {
 
                 rob.driveTrainEncoderMovement(1,(131 - rob.Back.getDistance((DistanceUnit.CM)))/2.54,20,0,Goal.movements.forward);
                 rob.stopDrivetrain();
-                rob.driveTrainEncoderMovement(1,((rob.rightFront.getDistance((DistanceUnit.CM))-45)/2.54),20,0,Goal.movements.right);
+                rob.driveTrainEncoderMovement(1,((rob.Right.getDistance((DistanceUnit.CM))-45)/2.54),20,0,Goal.movements.right);
                 rob.stopDrivetrain();
                 move_to_pos = false;
             }
