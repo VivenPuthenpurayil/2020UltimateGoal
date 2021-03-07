@@ -22,12 +22,12 @@ public class TestUltrasonic extends AutonomousControl {
             //telemetry.addData("raw ultrasonic front", rob.front.rawUltrasonic());
             //telemetry.addData("raw optical front", rob.front.rawOptical());
             //telemetry.addData("cm optical front", "%.2f cm", rob.front.cmOptical());
-            telemetry.addData("Inches front", "%.2f in", rob.rightFront.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Inches front", "%.2f in", rob.Right.getDistance(DistanceUnit.INCH));
 
             //telemetry.addData("raw ultrasonic back", rob.back.rawUltrasonic());
             //telemetry.addData("raw optical back", rob.back.rawOptical());
             //telemetry.addData("cm optical back", "%.2f cm", rob.back.cmOptical());
-            telemetry.addData("Inches back", "%.2f in", rob.rightBack.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Inches back", "%.2f in", rob.Right.getDistance(DistanceUnit.INCH));
 
             //telemetry.addData("raw ultrasonic left", rob.left.rawUltrasonic());
             //telemetry.addData("raw optical left", rob.left.rawOptical());
