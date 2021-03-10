@@ -19,19 +19,17 @@ public class AutoNoCV extends AutonomousControl {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         setup(runtime, Goal.setupType.autonomous);
         telemetry.addLine("Start!");
         telemetry.update();
 
         if (opModeIsActive()) {
-
-//            zero();
-            one();
-//            four();
-
-           // angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
+           sleep(3000);
+            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("angle", angles.firstAngle);
+            telemetry.update();
+            sleep(4000);
+            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
             /*
             telemetry.update();
             // pick up wobble goal
@@ -41,39 +39,56 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
 
           */
+          /*  telemetry.addData("distance to wall", rob.rightFront.getDistance(DistanceUnit.CM));
+            telemetry.update();
+            sleep(3000);
+            rob.driveTrainEncoderMovement(.2, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
+            sleep(200);
 
-    /*
-            // 0 rings
+            double dist = rob.rightBack.getDistance(DistanceUnit.CM);
+           while (dist > 1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive()) {
+                rob.driveTrainMovement(0.1, Goal.movements.right);
+                dist = rob.rightBack.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+            }*/
 
+            rob.stopDrivetrain();
+          //  rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 153)/2.54,20,0,Goal.movements.backward);
+
+
+
+
+/* 0 rings
             //move to red square
-            rob.driveTrainEncoderMovement(1, 66, 20, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1,66,20,0,Goal.movements.forward);
             // previous 63
 
             //drop wobble goal
             rob.pinch.setPosition(0.8);
             sleep(500);
             rob.claw.setPower(0.3);
-            sleep(250);
+            sleep(500);
             rob.claw.setPower(0);
             sleep(250);
 
             //move back to pick up second wobble goal
 
-            rob.driveTrainEncoderMovement(1, 46, 20, 0, Goal.movements.backward);
+            rob.driveTrainEncoderMovement(1,46,20,0,Goal.movements.backward);
 
-            rob.lifter.setPosition(.87);
+            rob.lifter.setPosition(.84);
             sleep(200);
 
-            rob.driveTrainEncoderMovement(1, 6, 20, 0, Goal.movements.left);
+            rob.driveTrainEncoderMovement(1,6,20,0,Goal.movements.left);
 
             // turn to face second wobble goal
-            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.cw);
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.cw);
 
             rob.pinch.setPosition(0.8);
             sleep(500);
 
             // move to second wobble goal
-            rob.driveTrainEncoderMovement(.75, 16, 20, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(.75,16,20,0,Goal.movements.forward);
 
             // pick up second wobble goal
             sleep(250);
@@ -89,9 +104,9 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
 
             // move backwards to go back to red square
-            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.ccw);
-            rob.driveTrainEncoderMovement(1, 23, 20, 0, Goal.movements.right);
-            rob.driveTrainEncoderMovement(1, 42, 20, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.ccw);
+            rob.driveTrainEncoderMovement(1,23,20,0,Goal.movements.right);
+            rob.driveTrainEncoderMovement(1,42,20,0,Goal.movements.forward);
 
             //drop wobble goal
             rob.pinch.setPosition(0.8);
@@ -105,44 +120,26 @@ public class AutoNoCV extends AutonomousControl {
             rob.fly.setPower(-0.73);
             sleep(2000);
 
-
-            // correct angle
-//            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//            telemetry.addData("angle", (int)angles.firstAngle);
-//            telemetry.update();
-//            sleep(3000);
-//            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
-
-//           rob.driveTrainEncoderMovement(1, 5, 20, 0, Goal.movements.backward);
-            // move to shooting position
-//            rob.driveTrainEncoderMovement(1, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
-//            rob.driveTrainEncoderMovement(1, (46-rob.rightFront.getDistance(DistanceUnit.CM)) / 2.54, 20, 0, Goal.movements.left);
-//            close_movement(0, 46);
-//            rob.stopDrivetrain();
-//            rob.driveTrainEncoderMovement(1,(rob.Back.getDistance(DistanceUnit.CM) - 150)/2.54,20,0,Goal.movements.backward);
-//            close_movement(1, 150);
-//            rob.stopDrivetrain();
-
             // move backwards a bit so you dont hit the wobble goal
-            rob.driveTrainEncoderMovement(1, 7, 20, 0, Goal.movements.backward);
+            rob.driveTrainEncoderMovement(1,7,20,0,Goal.movements.backward);
 
             // move towards wall
-            rob.driveTrainEncoderMovement(1, 9, 20, 0, Goal.movements.right);
+            // rob.driveTrainEncoderMovement(1,9,20, 0, Goal.movements.right);
 
             // move to the left, to align shots
-            rob.driveTrainEncoderMovement(1, 22, 20, 0, Goal.movements.left);
+            rob.driveTrainEncoderMovement(1,22 ,20,0,Goal.movements.left);
 
             // move to right behind white line
-            rob.driveTrainEncoderMovement(1, 9, 20, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1,9,20,0,Goal.movements.forward);
 
             // shoot your shots
 
             sleep(500);
-            for (int i = 0; i <= 2; i++) {
+            for(int i = 0; i<=2; i++) {
                 rob.fly.setPower(-0.73);
                 sleep(200);
                 //200
-                rob.whack.setPosition(0.4);
+                rob.whack.setPosition(0.62);
                 sleep(1000);
                 //1000 each
                 rob.whack.setPosition(0);
@@ -150,10 +147,9 @@ public class AutoNoCV extends AutonomousControl {
             }
 
             // move to Launch Line
-            rob.driveTrainEncoderMovement(1, 8, 100, 100, Goal.movements.forward);
-*/
-
-        /*
+            rob.driveTrainEncoderMovement(1,8, 100, 100,Goal.movements.forward);
+            */
+/*
             // 1 ring
             //move to red square
             rob.driveTrainEncoderMovement(1,90,20,0,Goal.movements.forward);
@@ -163,7 +159,7 @@ public class AutoNoCV extends AutonomousControl {
             rob.pinch.setPosition(0.8);
             sleep(500);
             rob.claw.setPower(0.3);
-            sleep(250);
+            sleep(500);
             rob.claw.setPower(0);
             sleep(250);
 
@@ -171,7 +167,7 @@ public class AutoNoCV extends AutonomousControl {
             rob.driveTrainEncoderMovement(1,5,20,0,Goal.movements.backward);
             rob.driveTrainEncoderMovement(1,12,20,0,Goal.movements.right);
             rob.driveTrainEncoderMovement(1,65,20,0,Goal.movements.backward);
-            rob.lifter.setPosition(.87);
+            rob.lifter.setPosition(.84);
             sleep(200);
 
             // turn to face second wobble goal
@@ -209,20 +205,39 @@ public class AutoNoCV extends AutonomousControl {
             sleep(250);
             telemetry.addData("back",rob.Back.getDistance(DistanceUnit.CM) );
 
-            // correct angle
+//            while (rob.Back.getDistance(DistanceUnit.CM) > 100){
+//                rob.driveTrainMovement(1, Goal.movements.backward);
+//            }
+            double dist = 0;
+            do{
+                rob.driveTrainMovement(1, Goal.movements.backward);
+
+                dist = rob.Back.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
+
+            }
+            while(dist >1000 || dist > 153 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+
+            rob.stopDrivetrain();
             angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
+            rob.driveTrainIMUSwingTurnMovement(0.1, Goal.movements.backward, 300, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
 
-            // move to shooting position
-            rob.driveTrainEncoderMovement(.2, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
-            close_movement(0, 46);
-            rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 150)/2.54,20,0,Goal.movements.backward);
-            close_movement(1, 150);
+//            while(rob.rightBack.getDistance(DistanceUnit.CM) > 20){
+//            }
+            do{
+                rob.driveTrainMovement(1, Goal.movements.right);
 
-            */
+                dist = rob.Back.getDistance(DistanceUnit.CM);
+                telemetry.addData("cm Back", "%.2f cm", dist);
+                telemetry.update();
 
-/*
-            // 4 rings
+            }
+            while(dist >1000 || dist > 46 || Double.compare(dist, Double.NaN) == 0 && opModeIsActive());
+            rob.stopDrivetrain();
+ */
+
+            /* 4 rings
             //move to red square
             rob.driveTrainEncoderMovement(1,102,20,0,Goal.movements.forward);
 
@@ -230,7 +245,7 @@ public class AutoNoCV extends AutonomousControl {
             rob.pinch.setPosition(0.8);
             sleep(500);
             rob.claw.setPower(0.3);
-            sleep(250);
+            sleep(500);
             rob.claw.setPower(0);
             sleep(250);
 
@@ -238,7 +253,7 @@ public class AutoNoCV extends AutonomousControl {
 
             rob.driveTrainEncoderMovement(1,82,20,0,Goal.movements.backward);
 
-            rob.lifter.setPosition(.87);
+            rob.lifter.setPosition(.84);
             sleep(200);
 
             rob.driveTrainEncoderMovement(1,6,20,0,Goal.movements.left);
@@ -278,21 +293,12 @@ public class AutoNoCV extends AutonomousControl {
             rob.claw.setPower(0);
             sleep(250);
 
-            // correct angle
-            angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            rob.driveTrainIMUSwingTurnMovement(0.4, Goal.movements.backward, 3000, (int)angles.firstAngle, 0.02, Goal.turnside.cw);
-
-            // move to shooting position
-            rob.driveTrainEncoderMovement(.2, (rob.rightFront.getDistance(DistanceUnit.CM) - 46) / 2.54, 20, 0, Goal.movements.right);
-            close_movement(0, 46);
-            rob.driveTrainEncoderMovement(.2,(rob.Back.getDistance(DistanceUnit.CM) - 150)/2.54,20,0,Goal.movements.backward);
-            close_movement(1, 150);
-
- */
+             */
 
 
         }
     }
+}
 
     /*
     public void close_movement(int dir, double d) throws InterruptedException {
@@ -329,4 +335,3 @@ public class AutoNoCV extends AutonomousControl {
     }
 
      */
-}
