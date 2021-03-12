@@ -374,9 +374,9 @@ public class JanuaryAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                rob.driveTrainEncoderMovement(0.5, 23, 5, 0, Goal.movements.cw);
+                rob.driveTrainEncoderMovement(0.5, 24, 5, 0, Goal.movements.cw);
 
-                rob.driveTrainEncoderMovement(0.5, 40, 10, 0, Goal.movements.forward);
+                rob.driveTrainEncoderMovement(0.5, 35, 10, 0, Goal.movements.forward);
 
                 do{
                     rob.driveTrainMovement(0.5, Goal.movements.forward);
