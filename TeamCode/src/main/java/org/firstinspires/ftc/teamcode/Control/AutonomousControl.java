@@ -303,6 +303,25 @@ public abstract class AutonomousControl extends Central {
         rob.driveTrainEncoderMovement(1, 8, 100, 100, Goal.movements.forward);
     }
 
+    public void pickupgoal() {
+        rob.claw.setPower(-0.4);
+        sleep(300);
+        rob.claw.setPower(0);
+        sleep(100);
+        rob.pinch.setPosition(0);
+        sleep(400);
+    }
+
+    public void dropgoal() {
+        //drop wobble goal
+        rob.pinch.setPosition(0.8);
+        sleep(200);
+        rob.claw.setPower(0.4);
+        sleep(200);
+        rob.claw.setPower(0);
+        sleep(100);
+    }
+
 }
 
 
