@@ -54,7 +54,7 @@ public class JanuaryAuton extends AutonomousControl
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
         // out when the RC activity is in portrait. We do our actual image processing assuming
-        // landscape orientation, though.
+        // landscape orientation, though.h
 
         rob.webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
