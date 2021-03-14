@@ -145,7 +145,7 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (flywheelon) {
-                rob.fly.setPower(-0.625);
+                rob.fly.setPower(-0.68);
             }
 
             if(gamepad2.a) {
@@ -163,9 +163,10 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.fly.setPower(-0.625-(i*0.02));
+//                    rob.fly.setPower(-0.675-(i*0.02));
+                    rob.fly.setPower(-0.67);
 //                    sleep(500);
-                    sleep(500);
+                    sleep(300);
 
                     if(gamepad2.b){
                         emergencystopDriver2();
@@ -181,7 +182,7 @@ public class CurrentTeleop extends TeleOpControl {
                     }
 
                     rob.whack.setPosition(0);
-                    sleep(500);
+                    sleep(750);
 
                     if(gamepad2.b){
                         emergencystopDriver2();
