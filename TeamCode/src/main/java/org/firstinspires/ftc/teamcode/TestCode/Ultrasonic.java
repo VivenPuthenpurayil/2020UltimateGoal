@@ -20,7 +20,7 @@ public class Ultrasonic extends AutonomousControl {
         while (opModeIsActive()) {
             double distanceBack = rob.Right.getDistance(DistanceUnit.CM);
             double distanceFront = rob.Right.getDistance(DistanceUnit.CM);
-            telemetry.addData("right back cm", "%.2f cm", rob.Right.getDistance(DistanceUnit.CM));
+            telemetry.addData("Front cm", "%.2f cm", rob.Front.getDistance(DistanceUnit.CM));
             telemetry.addData("right front cm", "%.2f cm", rob.Right.getDistance(DistanceUnit.CM));
             telemetry.addData("back", "%.2f cm", rob.Back.getDistance(DistanceUnit.CM));
 

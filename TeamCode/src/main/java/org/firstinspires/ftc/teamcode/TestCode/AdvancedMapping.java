@@ -18,6 +18,68 @@ public class AdvancedMapping extends AutonomousControl {
         telemetry.addLine("Start!");
         telemetry.update();
         if (opModeIsActive()) {
+
+
+
+            double distX = rob.Right.getDistance(DistanceUnit.INCH) + (13.229/2);
+            double distY = rob.Back.getDistance(DistanceUnit.INCH) + (15.118 / 2);
+            double close = (distX - (distX%12));
+            double closeY = (distY - (distY%12));
+            if(close % 24 < 1){
+                close = distX + (12 - (distX%12));
+            }
+            if(closeY % 24 < 1){
+                closeY = distY + (12 - (distY%12));
+            }
+            if(close > distX){
+                rob.driveTrainEncoderMovement(0.2, close - distX - 2, 20, 0, Goal.movements.left);
+            }
+            else{
+                rob.driveTrainEncoderMovement(0.2, distX - close - 2, 20, 0, Goal.movements.right);
+            }
+            if(closeY > distY){
+                rob.driveTrainEncoderMovement(0.2, closeY - distY - 2, 20, 0, Goal.movements.forward);
+            }
+            else{
+                rob.driveTrainEncoderMovement(0.2, distY - closeY - 2, 20, 0, Goal.movements.backward);
+            }
+
+
+//            int[][] squares = {{distX,distY},{0,24},{0,48},{0,72},{0,96},{0,120},{0,144},
+//                    {24,0},{24,24},{24,48},{24,72},{24,96},{24,120},{24,144},
+//                    {48,0},{48,24},{48,48},{48,72},{48,96},{48,120},{48,144},
+//                    {72,0},{72,24},{72,48},{72,72},{72,96},{72,120},{72,144},
+//                    {96,0},{96,24},{96,48},{96,72},{96,96},{96,120},{96,144}};
+
+//            double[][] squares = new double[12][2];
+//                // [i][0] is right, [i][1] is back
+//            int p = 0;
+//            for (int i=0; i<3; i++) {
+//                for (int j=0; j<4; j++) {
+//                    squares[p][0] = 12 + 24*j;
+//                    squares[p][1] = 12 + 24*i;
+//                    p++;
+//                }
+//            }
+//
+//            // find closest
+//            double min=dist(distX, distY, squares[0][0], squares[0][1]);
+//            int closeindex = 0;
+//            for (int i=1; i<12; i++) {
+//                double curdist = dist(distX, distY, squares[i][0], squares[i][1]);
+//                if (curdist < min) {
+//                    min = curdist;
+//                    closeindex = i;
+//                }
+//            }
+//
+//            rob.driveTrainEncoderMovement(0.2, distX - squares[closeindex][0], 20, 0, Goal.movements.right);
+//            rob.driveTrainEncoderMovement(0.2, distY - squares[closeindex][1], 20, 0, Goal.movements.backward);
+
+            
+            // go to the location
+
+
            /* int[][] squares = { {0,0},{0,24},{0,48},{0,72},{0,96},{0,120},{0,144},
                     {24,0},{24,24},{24,48},{24,72},{24,96},{24,120},{24,144},
                     {48,0},{48,24},{48,48},{48,72},{48,96},{48,120},{48,144},
@@ -43,8 +105,8 @@ public class AdvancedMapping extends AutonomousControl {
             int x1 = squares[i][0]; // the x coordinate the robot is in
             int y1 = squares[j][1]; // the y coordinate the robot is in
             */
-            double distX = rob.Right.getDistance(DistanceUnit.INCH) + (13.229/2);
-            double distY = rob.Back.getDistance(DistanceUnit.INCH) + (15.118 / 2);
+//            double distX = rob.Right.getDistance(DistanceUnit.INCH) + (13.229/2);
+//            double distY = rob.Back.getDistance(DistanceUnit.INCH) + (15.118 / 2);
 
             /*
             (0,0)     (0, 12)    (0, 24)
@@ -73,6 +135,8 @@ public class AdvancedMapping extends AutonomousControl {
 //            else {
 //                rob.driveTrainEncoderMovement(0.2, 12 - distX%24, 20, 0, Goal.movements.right);
 //            }
+
+        /*
             rob.stopDrivetrain();
             telemetry.addData("right", distX);
             telemetry.addData("right mod", distX%12);
@@ -82,13 +146,29 @@ public class AdvancedMapping extends AutonomousControl {
             double close = (distX - (distX%12));
             double closeY = (distY - (distY%12));
             if(close % 24 == 0){
-                close = distX + (distX%12);
+                close = distX + (12 - (distX%12));
             }
+            telemetry.addData("DistX: ", distX);
+            telemetry.addData("distY: ", distY);
+            telemetry.addData("close: ", close);
+            telemetry.addData("closeY: ", closeY);
+            telemetry.update();
+            sleep(5000);
+            if(close > distX){
+                rob.driveTrainEncoderMovement(0.2, close - distX - 2, 20, 0, Goal.movements.left);
+            }
+            else{
+                rob.driveTrainEncoderMovement(0.2, distX - close - 2, 20, 0, Goal.movements.right);
+            }
+            if(closeY > distY){
+                rob.driveTrainEncoderMovement(0.2, closeY - distY - 2, 20, 0, Goal.movements.forward);
+            }
+            else{
+                rob.driveTrainEncoderMovement(0.2, distY - closeY - 2, 20, 0, Goal.movements.backward);
 
-
-
-
-
+            }
+            telemetry.update();
+        */
 /*
             double dist = 0;
 //            dist = rob.Back.getDistance(DistanceUnit.CM) / 2.54;
@@ -154,5 +234,9 @@ public class AdvancedMapping extends AutonomousControl {
 
 
         }
+    }
+
+    public double dist(double x1, double y1, double x2, double y2) {
+        return (double)(x1 - x2)*(x1 - x2) + (double)(y1 - y2) * (y1 - y2);
     }
 }
