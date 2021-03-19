@@ -85,22 +85,22 @@ public class CurrentTeleop extends TeleOpControl {
             else {
 
                 if (g(0)) {
-                    rob.driveTrainMovement(0.5, Goal.movements.left);
-                } else if (g(2)) {
-                    rob.driveTrainMovement(0.5, Goal.movements.right);
-                } else if (g(3)) {
                     rob.driveTrainMovement(0.3, Goal.movements.forward);
-                } else if (g(1)) {
+                } else if (g(2)) {
                     rob.driveTrainMovement(0.3, Goal.movements.backward);
+                } else if (g(3)) {
+                    rob.driveTrainMovement(0.3, Goal.movements.right);
+                } else if (g(1)) {
+                    rob.driveTrainMovement(0.3, Goal.movements.left);
                 }
                 else if (g(4)) {
-                    rob.driveTrainMovement(0.3, Goal.movements.tr);
-                }else if (g(5)) {
-                    rob.driveTrainMovement(0.3, Goal.movements.tl);
-                }else if (g(6)) {
-                    rob.driveTrainMovement(0.3, Goal.movements.bl);
-                }else if (g(7)) {
                     rob.driveTrainMovement(0.3, Goal.movements.br);
+                }else if (g(5)) {
+                    rob.driveTrainMovement(0.3, Goal.movements.bl);
+                }else if (g(6)) {
+                    rob.driveTrainMovement(0.3, Goal.movements.tl);
+                }else if (g(7)) {
+                    rob.driveTrainMovement(0.3, Goal.movements.tr);
                 }
                 else if (g(8)) {
                     rob.driveTrainMovement(.3, Goal.movements.ccw);
@@ -164,7 +164,7 @@ public class CurrentTeleop extends TeleOpControl {
                     }
 
 //                    rob.fly.setPower(-0.675-(i*0.02));
-                    rob.fly.setPower(-0.64);
+                    rob.fly.setPower(-0.62);
 //                    sleep(500);
                     sleep(300);
 
@@ -173,7 +173,7 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.whack.setPosition(0.42);
+                    rob.whack.setPosition(0.5);
                     sleep(500);
 
                     if(gamepad2.b){
@@ -252,9 +252,14 @@ public class CurrentTeleop extends TeleOpControl {
                 angles = rob.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 //rob.teleturn((float) (Math.abs(angles.firstAngle)), Goal.turnside.cw, 0.9, Goal.axis.center);
 
-                rob.driveTrainEncoderMovement(1,(131 - rob.Back.getDistance((DistanceUnit.CM)))/2.54,20,0,Goal.movements.forward);
+//                rob.driveTrainEncoderMovement(1,(131 - rob.Back.getDistance((DistanceUnit.CM)))/2.54,20,0,Goal.movements.forward);
+                rob.driveTrainEncoderMovement(1, 142/2.54 - rob.Back.getDistance(DistanceUnit.INCH),20,0,Goal.movements.forward);
+
                 rob.stopDrivetrain();
-                rob.driveTrainEncoderMovement(1,((rob.Right.getDistance((DistanceUnit.CM))-45)/2.54),20,0,Goal.movements.right);
+                sleep(200);
+
+//                rob.driveTrainEncoderMovement(1,((rob.Right.getDistance((DistanceUnit.CM))-45)/2.54),20,0,Goal.movements.right);
+                rob.driveTrainEncoderMovement(1, 77/2.54 - rob.Right.getDistance(DistanceUnit.INCH), 20, 0, Goal.movements.right);
                 rob.stopDrivetrain();
                 move_to_pos = false;
             }

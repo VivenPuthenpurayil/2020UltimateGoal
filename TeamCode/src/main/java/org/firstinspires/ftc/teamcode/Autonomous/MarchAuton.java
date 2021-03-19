@@ -21,6 +21,7 @@
 
         package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -77,9 +78,11 @@ public class MarchAuton extends AutonomousControl
             double distanceLeft = rob.Left.getDistance(DistanceUnit.CM);
             double distanceRight = rob.Right.getDistance(DistanceUnit.CM);
 
+            double speed = 0.7;
+            double speed2 = 0.9;
 
             do{
-                rob.driveTrainMovement(0.5, Goal.movements.forward);
+                rob.driveTrainMovement(0.7, Goal.movements.forward);
                 distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                 telemetry.addData("cm Back", "%.2f cm", distanceBack);
                 telemetry.update();
@@ -87,16 +90,18 @@ public class MarchAuton extends AutonomousControl
             }
             while(distanceBack >1000 || distanceBack < 33 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
-            do{
-                rob.driveTrainMovement(0.5, Goal.movements.left);
-                distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
-                telemetry.addData("cm Back", "%.2f cm", distanceRight);
-                telemetry.update();
-
-            }
-            while(distanceRight >1000 || distanceRight < 6 || Double.compare(distanceRight, Double.NaN) == 0 && opModeIsActive());
-
             rob.stopDrivetrain();
+
+//            do{
+//                rob.driveTrainMovement(speed, Goal.movements.left);
+//                distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
+//                telemetry.addData("cm Back", "%.2f cm", distanceRight);
+//                telemetry.update();
+//
+//            }
+//            while(distanceRight >1000 || distanceRight < 6 || Double.compare(distanceRight, Double.NaN) == 0 && opModeIsActive());
+//
+//            rob.stopDrivetrain();
 
             sleep(100);
 
@@ -109,10 +114,11 @@ public class MarchAuton extends AutonomousControl
                 // Don't burn CPU cycles busy-looping in this sample
                 sleep(50);
             }
+
             if (pipeline.value == 4){
 
                 do{
-                    rob.driveTrainMovement(1, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -125,10 +131,12 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                rob.driveTrainEncoderMovement(1, 45, 10, 0, Goal.movements.backward);
+                rob.driveTrainEncoderMovement(speed2, 45, 10, 0, Goal.movements.backward);
+
+                rob.stopDrivetrain();
 
                 do{
-                    rob.driveTrainMovement(1, Goal.movements.backward);
+                    rob.driveTrainMovement(speed, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
@@ -143,7 +151,7 @@ public class MarchAuton extends AutonomousControl
                 rob.driveTrainEncoderMovement(.5, 23, 5, 0, Goal.movements.ccw);
 
                 do{
-                    rob.driveTrainMovement(.6, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -151,16 +159,6 @@ public class MarchAuton extends AutonomousControl
 
                 }
                 while(distanceBack >1000 || distanceBack < 21 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
-
-                do{
-                    rob.driveTrainMovement(.2, Goal.movements.forward);
-
-                    distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
-                    telemetry.addData("cm Back", "%.2f cm", distanceBack);
-                    telemetry.update();
-
-                }
-                while(distanceBack >1000 || distanceBack < 27 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
                 rob.stopDrivetrain();
 
@@ -171,14 +169,14 @@ public class MarchAuton extends AutonomousControl
                 sleep(100);
 
                 do{
-                    rob.driveTrainMovement(.8, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
                     telemetry.update();
 
                 }
-                while(distanceBack >1000 || distanceBack < 21 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while(distanceBack >1000 || distanceBack < 24 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
 
                 rob.stopDrivetrain();
@@ -188,7 +186,7 @@ public class MarchAuton extends AutonomousControl
                 sleep(400);
 
                 do{
-                    rob.driveTrainMovement(.8, Goal.movements.backward);
+                    rob.driveTrainMovement(speed, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -200,12 +198,15 @@ public class MarchAuton extends AutonomousControl
                 rob.stopDrivetrain();
 
                 rob.driveTrainEncoderMovement(.5, 23, 5, 0, Goal.movements.cw);
+
                 rob.stopDrivetrain();
 
-                rob.driveTrainEncoderMovement(.8, 35, 10, 0, Goal.movements.forward);
+                rob.driveTrainEncoderMovement(speed2, 35, 10, 0, Goal.movements.forward);
+
+                rob.stopDrivetrain();
 
                 do{
-                    rob.driveTrainMovement(.8, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -218,9 +219,10 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                rob.driveTrainEncoderMovement(.8, 5, 10, 0, Goal.movements.backward);
+                rob.driveTrainEncoderMovement(speed2, 5, 10, 0, Goal.movements.backward);
+
                 do {
-                    rob.driveTrainMovement(.8,Goal.movements.tl);
+                    rob.driveTrainMovement(speed,Goal.movements.tl);
 
                     distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceRight);
@@ -233,30 +235,33 @@ public class MarchAuton extends AutonomousControl
 
 
                 do {
-                    rob.driveTrainMovement(.8, Goal.movements.backward);
+                    rob.driveTrainMovement(speed, Goal.movements.backward);
                     distanceFront= rob.Front.getDistance(DistanceUnit.INCH);
 
                 }
-                while (distanceBack > 1000 || distanceFront < 53 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while (distanceBack > 1000 || distanceFront < 59 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                rob.stopDrivetrain();
+                sleep(200);
+
+                do {
+                    rob.driveTrainMovement(speed, Goal.movements.left);
+
+                    distanceLeft = rob.Left.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Left", "%.2f cm", distanceLeft);
+                    telemetry.update();
+
+                }
+                while (distanceLeft > 1000 || distanceLeft > 46 || Double.compare(distanceLeft, Double.NaN) == 0 && opModeIsActive());
+
                 rob.stopDrivetrain();
 
-
-
-//                do {
-//                    rob.driveTrainMovement(.8, Goal.movements.forward);
-//                    distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
-//                    distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
-//
-//                }
-//                while (distanceBack > 1000 || distanceFront < 49 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
-
             }
-
-
             else if(pipeline.value == 1){
-///dropping off the first goal
+
+                //dropping off the first goal
+
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(speed2, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -269,7 +274,7 @@ public class MarchAuton extends AutonomousControl
                 sleep(200);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.left);
+                    rob.driveTrainMovement(speed, Goal.movements.left);
 
                     distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm front", "%.2f cm", distanceRight);
@@ -282,11 +287,11 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                rob.driveTrainEncoderMovement(0.6, 10, 5, 0, Goal.movements.backward);
+                rob.driveTrainEncoderMovement(speed2, 10, 5, 0, Goal.movements.backward);
                 sleep(200);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.right);
+                    rob.driveTrainMovement(speed, Goal.movements.right);
 
                     distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm front", "%.2f cm", distanceRight);
@@ -299,7 +304,7 @@ public class MarchAuton extends AutonomousControl
                 sleep(200);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.backward);
+                    rob.driveTrainMovement(speed2, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -313,7 +318,7 @@ public class MarchAuton extends AutonomousControl
                 rob.driveTrainEncoderMovement(0.5, 22.5, 5, 0, Goal.movements.ccw);
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(speed2, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -326,12 +331,12 @@ public class MarchAuton extends AutonomousControl
 
                 //pickupgoal();
                 rob.claw.setPower(-0.4);
-                sleep(320);
+                sleep(200);
                 rob.claw.setPower(0);
                 sleep(100);
 
                 do{
-                    rob.driveTrainMovement(.8, Goal.movements.forward);
+                    rob.driveTrainMovement(speed2, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -350,7 +355,7 @@ public class MarchAuton extends AutonomousControl
                 //getting the second goal
 
                 do{
-                    rob.driveTrainMovement(.8, Goal.movements.backward);
+                    rob.driveTrainMovement(speed2, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -361,12 +366,12 @@ public class MarchAuton extends AutonomousControl
 
                 rob.stopDrivetrain();
 
-                rob.driveTrainEncoderMovement(.6, 23.5, 5, 0, Goal.movements.cw);
+                rob.driveTrainEncoderMovement(.5, 23.5, 5, 0, Goal.movements.cw);
 
                 //taking second goal to spot
 
                 do{
-                    rob.driveTrainMovement(1, Goal.movements.forward);
+                    rob.driveTrainMovement(speed2, Goal.movements.forward);
 
                     distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -376,9 +381,10 @@ public class MarchAuton extends AutonomousControl
                 while(distanceBack >1000 || distanceFront > 43 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
                 rob.stopDrivetrain();
+                sleep(200);
 
                 do{
-                    rob.driveTrainMovement(.6, Goal.movements.left);
+                    rob.driveTrainMovement(speed, Goal.movements.left);
 
                     distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm front", "%.2f cm", distanceRight);
@@ -391,16 +397,40 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                // move back to white line
-                rob.driveTrainEncoderMovement(1, 25, 5, 0, Goal.movements.backward);
-                rob.driveTrainEncoderMovement(1, 5, 5, 0, Goal.movements.left);
+//                rob.driveTrainEncoderMovement(speed2, 45, 5, 0, Goal.movements.backward);
+
+                //                do {
+//                    rob.driveTrainMovement(speed2, Goal.movements.backward);
+//                    distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
+//                }
+//                while (distanceBack > 1000 || distanceBack > 55 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+
+                do {
+                    rob.driveTrainMovement(speed2, Goal.movements.backward);
+                    distanceFront = rob.Front.getDistance(DistanceUnit.INCH);
+                }
+                while (distanceFront > 1000 || distanceFront < 59 || Double.compare(distanceFront, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
+
+                do {
+                    rob.driveTrainMovement(speed2, Goal.movements.left);
+
+                    distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
+                    telemetry.addData("cm Back", "%.2f cm", distanceRight);
+                    telemetry.update();
+
+                }
+                while (distanceRight > 1000 || distanceRight < 30 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+
+                rob.stopDrivetrain();
 
 
             }else{
                 //dropping off the first goal
 
                 do{
-                    rob.driveTrainMovement(0.6, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -413,10 +443,10 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                rob.driveTrainEncoderMovement(1, 45, 10, 0, Goal.movements.backward);
+                rob.driveTrainEncoderMovement(speed2, 45, 10, 0, Goal.movements.backward);
 
                 do{
-                    rob.driveTrainMovement(1, Goal.movements.backward);
+                    rob.driveTrainMovement(speed, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -430,7 +460,7 @@ public class MarchAuton extends AutonomousControl
                 rob.driveTrainEncoderMovement(.5, 22.5, 5, 0, Goal.movements.ccw);
 
                 do{
-                    rob.driveTrainMovement(1, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -448,7 +478,7 @@ public class MarchAuton extends AutonomousControl
                 sleep(100);
 
                 do{
-                    rob.driveTrainMovement(.5, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -465,7 +495,7 @@ public class MarchAuton extends AutonomousControl
                 sleep(400);
 
                 do{
-                    rob.driveTrainMovement(.5, Goal.movements.backward);
+                    rob.driveTrainMovement(speed, Goal.movements.backward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -478,10 +508,10 @@ public class MarchAuton extends AutonomousControl
 
                 rob.driveTrainEncoderMovement(.5, 24, 5, 0, Goal.movements.cw);
 
-                rob.driveTrainEncoderMovement(.5, 35, 10, 0, Goal.movements.forward);
+                rob.driveTrainEncoderMovement(speed2, 35, 10, 0, Goal.movements.forward);
 
                 do{
-                    rob.driveTrainMovement(.5, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
 
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
                     telemetry.addData("cm Back", "%.2f cm", distanceBack);
@@ -494,48 +524,60 @@ public class MarchAuton extends AutonomousControl
 
                 dropgoal();
 
-                do {
-                    rob.driveTrainMovement(.5, Goal.movements.backward);
-                    distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
+//                do {
+//                    rob.driveTrainMovement(.5, Goal.movements.backward);
+//                    distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
+//
+//                }
+//                while (distanceBack > 1000 || distanceBack > 49 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
-                }
-                while (distanceBack > 1000 || distanceBack > 49 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                rob.driveTrainEncoderMovement(speed2, 10, 10, 0, Goal.movements.backward);
+
+                rob.stopDrivetrain();
+                sleep(200);
 
                 do {
-                    rob.driveTrainMovement(.5, Goal.movements.left);
+                    rob.driveTrainMovement(speed, Goal.movements.left);
 
                     distanceRight = rob.Right.getDistance(DistanceUnit.INCH);
-                    telemetry.addData("cm Back", "%.2f cm", distanceRight);
+                    telemetry.addData("cm Left", "%.2f cm", distanceLeft);
                     telemetry.update();
 
                 }
-                while (distanceRight > 1000 || distanceRight < 28 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while (distanceRight > 1000 || distanceRight < 30 || Double.compare(distanceRight, Double.NaN) == 0 && opModeIsActive());
+
                 rob.stopDrivetrain();
+                sleep(200);
 
                 do {
-                    rob.driveTrainMovement(.5, Goal.movements.forward);
+                    rob.driveTrainMovement(speed, Goal.movements.forward);
                     distanceBack = rob.Back.getDistance(DistanceUnit.INCH);
 
                 }
-                while (distanceBack > 1000 || distanceFront < 52 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while (distanceBack > 1000 || distanceBack < 55 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
-
+                rob.stopDrivetrain();
 
             }
 
-            rob.fly.setPower(-.62);
-            sleep(3000);
+            rob.stopDrivetrain();
+
+/*
+            rob.fly.setPower(-0.62);
+            sleep(2500);
             rob.lifter.setPosition(.86);
-            sleep(250);
+            sleep(500);
             for (int i = 0; i <= 2; i++) {
-                rob.fly.setPower(-0.62);
+                rob.fly.setPower(-0.665);
                 sleep(300);
                 rob.whack.setPosition(0.42);
                 sleep(500);
                 rob.whack.setPosition(0);
                 sleep(750);
             }
-
+ */
+            // move to white line
+            rob.driveTrainEncoderMovement(1, 10, 10, 0, Goal.movements.forward);
         }
     }
 

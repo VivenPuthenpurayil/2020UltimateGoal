@@ -147,7 +147,7 @@ public class Goal {
     public int y = 0;
     public int blockNumber = 0;
 
-    public int[] wheelAdjust = {1, 1, 1, 1};
+    public int[] wheelAdjust = {-1, -1, -1, -1};
 
     public static double speedAdjust = 20.0 / 41.0;
     public static double yToXRatio = 1.25;
@@ -1018,8 +1018,8 @@ public class Goal {
         bl(1, 0, 0, -1),
         tl(0, 1, -1, 0),
         tr(-1, 0, 0, 1),
-        ccw(1, 1, 1, 1),
-        cw(-1, -1, -1, -1),
+        ccw(-1, -1, -1, -1),
+        cw(1, 1, 1, 1),
         cwback(-1, -1, 0, 0),
         ccwback(1, 1, 0, 0),
         cwfront(0, 0, -1, -1),
