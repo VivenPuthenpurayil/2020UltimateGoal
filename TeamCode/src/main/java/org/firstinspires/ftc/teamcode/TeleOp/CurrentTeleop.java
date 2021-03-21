@@ -180,7 +180,7 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.whack.setPosition(0);
+                    rob.whack.setPosition(0.05);
                     sleep(500);
 
                     if(gamepad2.b){
@@ -268,7 +268,7 @@ public class CurrentTeleop extends TeleOpControl {
         sleep(200);
         rob.lifter.setPosition(0.98);
         sleep(200);
-        rob.whack.setPosition(0);
+        rob.whack.setPosition(0.05);
     }
 
     public void emergencystopDriver1() throws InterruptedException {

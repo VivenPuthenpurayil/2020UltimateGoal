@@ -43,10 +43,8 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_COREHE
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_GOBUILDA435RPM_INCH;
 import static org.firstinspires.ftc.teamcode.Control.Constants.claws;
 import static org.firstinspires.ftc.teamcode.Control.Constants.collections;
-import static org.firstinspires.ftc.teamcode.Control.Constants.colorSensorS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.flys;
 import static org.firstinspires.ftc.teamcode.Control.Constants.imuS;
-import static org.firstinspires.ftc.teamcode.Control.Constants.leftFronts;
 import static org.firstinspires.ftc.teamcode.Control.Constants.lifters;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorBLS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorBRS;
@@ -150,7 +148,13 @@ public class Goal {
     public int[] wheelAdjust = {-1, -1, -1, -1};
 
     public static double speedAdjust = 20.0 / 41.0;
-    public static double yToXRatio = 1.25;
+
+    /**
+     * Ratio of forward to strafe movement for any diagonal movement
+     * Used in {@link #anyDirection(double, double)} to find speeds to move motors at to move at a
+     * specific angle
+     */
+    public static double FORWARD_TO_STRAFE_MOTION_RATIO = 1.25;
 
     public void setWheelAdjust(int fr, int fl, int br, int bl) {
         wheelAdjust[0] = fr;
@@ -165,6 +169,7 @@ public class Goal {
     // Vuforia Variables
     public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     public static final boolean PHONE_IS_PORTRAIT = false  ;
+
 
     public final String VUFORIA_KEY =
             " AYzLd0v/////AAABmR035tu9m07+uuZ6k86JLR0c/MC84MmTzTQa5z2QOC45RUpRTBISgipZ2Aop4XzRFFIvrLEpsop5eEBl5yu5tJxK6jHbMppJyWH8lQbvjz4PAK+swG4ALuz2M2MdFXWl7Xh67s/XfIFSq1UJpX0DgwmZnoDCYHmx/MnFbyxvpWIMLZziaJqledMpZtmH11l1/AS0oH+mrzWQLB57w1Ur0FRdhpxcrZS9KG09u6I6vCUc8EqkHqG7T2Zm4QdnytYWpVBBu17iRNhmsd3Ok3w8Pn22blBYRo6dZZ8oscyQS1ZtilM1YT49ORQHc8mu/BMWh06LxdstWctSiGiBV0+Wn3Zk++xQ750c64lg3QLjNkXc";
@@ -187,6 +192,7 @@ public class Goal {
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     public WebcamName webcamName = null;
+
 
     public List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     public VuforiaTrackables targetsUltimateGoal;
@@ -271,7 +277,7 @@ public class Goal {
 
 
     public void setupStorage() throws InterruptedException {
-        whack = servo(whacker, Servo.Direction.FORWARD, 0, 1, 0);
+        whack = servo(whacker, Servo.Direction.FORWARD, 0, 1, 0.05);
         lifter = servo(lifters, Servo.Direction.FORWARD, 0, 1 , 1);
         // teleop .98
         encoder(EncoderMode.OFF, fly);
@@ -1076,41 +1082,43 @@ public class Goal {
         ccw, cw
     }
 
+    /**
+     * Finds the set of two direction speeds at the mecanum's movement angles that create a vector movement towards the desired angle
+     * @param speed speed of movement
+     * @param angleDegrees angle (in degrees) of movement
+     * @return array of motor directions
+     */
     public static double[] anyDirection(double speed, double angleDegrees) {
         double theta = Math.toRadians(angleDegrees);
-        double beta = Math.atan(yToXRatio);
 
-        double v1 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) + speed * Math.cos(theta) / Math.cos(beta));
-        double v2 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) - speed * Math.cos(theta) / Math.cos(beta));
-
-        double[] retval = {v1, v2};
-        return retval;
+        return anyDirectionRadians(speed, theta);
     }
 
+    /**
+     * Finds the set of two direction speeds at the mecanum's movement angles that create a vector movement towards the desired angle
+     * @param speed speed of movement
+     * @param angleRadians angle (in radians) of movement
+     * @return array of motor directions
+     */
     public static double[] anyDirectionRadians(double speed, double angleRadians) {
         double theta = angleRadians;
-        double beta = Math.atan(yToXRatio);
+        double beta = Math.atan(FORWARD_TO_STRAFE_MOTION_RATIO);
 
         double v1 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) + speed * Math.cos(theta) / Math.cos(beta));
         double v2 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) - speed * Math.cos(theta) / Math.cos(beta));
 
-        double[] retval = {v1, v2};
-        return retval;
+        double[] motorSpeeds = {v1, v2};
+        return motorSpeeds;
     }
 
-    public void driveTrainMovementAngle(double speed, double angle) {
+    /**
+     *
+     * @param speed
+     * @param degrees
+     */
+    public void driveTrainMovementAngle(double speed, double degrees) {
 
-        double[] speeds = anyDirection(speed, angle);
-        motorFR.setPower(movements.forward.directions[0] * speeds[0]);
-        motorFL.setPower(movements.forward.directions[1] * speeds[1]);
-        motorBR.setPower(movements.forward.directions[2] * speeds[1]);
-        motorBL.setPower(movements.forward.directions[3] * speeds[0]);
-
-    }
-
-    public void driveTrainMovementAngleRadians(double speed, double angle) {
-
-        double[] speeds = anyDirectionRadians(speed, angle);
+        double[] speeds = anyDirection(speed, degrees);
         motorFR.setPower(movements.forward.directions[0] * speeds[0]);
         motorFL.setPower(movements.forward.directions[1] * speeds[1]);
         motorBR.setPower(movements.forward.directions[2] * speeds[1]);
