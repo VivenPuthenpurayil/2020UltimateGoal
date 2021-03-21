@@ -287,7 +287,7 @@ public class Goal {
     public void setupFly() throws InterruptedException {
         fly = motor(flys, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
 
-        encoder(EncoderMode.OFF, fly);
+        encoder(EncoderMode.ON, fly);
 
 
     }
@@ -646,6 +646,35 @@ public class Goal {
 
         }
     }
+
+    public void PIDFly(double totalTime, double goal, double p, double i, double d, double sleepTime, double bias){
+        runtime.reset();
+        double lasterror = 0;
+        double lastint = 0;
+
+        double st = sleepTime*1000;
+
+        while(runtime.seconds()<totalTime){
+            double error = goal - velocityFly();
+            double integral = lastint + error*(sleepTime+0.01);
+            double derivative = (error-lasterror)/(sleepTime+0.01);
+            double speed = p*error + i*integral + d*derivative + bias;
+            fly.setPower(speed);
+            lasterror = error;
+            lastint = integral;
+            central.sleep((long)st);
+        }
+    }
+
+    public double velocityFly(){
+        int curr = fly.getCurrentPosition();
+        double initTime = runtime.seconds();
+        while(runtime.seconds()-initTime<0.01){
+        }
+        int newPos = fly.getCurrentPosition();
+        return ((double)(newPos-curr)/0.01);
+    }
+
     public void encodeCoreHexMovement(double speed, double distance, double timeoutS, long waitAfter, movements movement, DcMotor... motors) throws InterruptedException {
 
         int[] targets = new int[motors.length];

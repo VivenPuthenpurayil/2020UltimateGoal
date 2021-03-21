@@ -321,15 +321,7 @@ public abstract class AutonomousControl extends Central {
         sleep(400);
     }
 
-    public void dropgoal() {
-        //drop wobble goal
-        rob.pinch.setPosition(0.8);
-        sleep(200);
-        rob.claw.setPower(0.4);
-        sleep(200);
-        rob.claw.setPower(0);
-        sleep(100);
-    }
+    
 
 }
 

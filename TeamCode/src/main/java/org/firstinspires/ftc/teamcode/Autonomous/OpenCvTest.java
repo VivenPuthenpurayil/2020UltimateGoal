@@ -70,7 +70,8 @@ public class OpenCvTest extends AutonomousControl
         double currTime = runtime.milliseconds();
 
         waitForStart();
-double x = 0.0;
+        double x = 0.0;
+
             //rob.driveTrainEncoderMovement(0.5, 10, 4, 0, Goal.movements.forward);
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Position", pipeline.position);
@@ -147,18 +148,19 @@ double x = 0.0;
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(100,98);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(150,148);
 
-        static final int REGION_WIDTH = 100;
-        static final int REGION_HEIGHT = 100;
+        static final int REGION_WIDTH = 150;
+        static final int REGION_HEIGHT = 150;
 
         final int FOUR_RING_THRESHOLD = 147;
-        final int ONE_RING_THRESHOLD = 140;
+        final int ONE_RING_THRESHOLD = 135;
         final int ZERO_RING_THRESHOLD = 120;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
+
         Point region1_pointB = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
@@ -166,6 +168,8 @@ double x = 0.0;
         /*
          * Working variables
          */
+
+        //new encoder function on flywheel
         Mat region1_Cb;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();

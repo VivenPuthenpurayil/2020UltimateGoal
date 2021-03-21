@@ -13,15 +13,26 @@ public class TestShooter extends AutonomousControl {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        setup(runtime, Goal.setupType.storage);
+        setup(runtime, Goal.setupType.autonomous);
         telemetry.addLine("Start!");
         telemetry.update();
 
         if (opModeIsActive()){
-            rob.lifter.setPosition(.84);
-            rob.whack.setPosition(.3);
-            //sleep(5000);
-            sleep(30000);
+            rob.fly.setPower(-.62);
+            sleep(3000);
+            rob.lifter.setPosition(.86);
+            sleep(250);
+            for (int i = 0; i <= 2; i++) {
+                rob.fly.setPower(-0.64);
+                sleep(300);
+                rob.whack.setPosition(0.42);
+                sleep(500);
+                rob.whack.setPosition(0);
+                sleep(750);
+            }
+            rob.fly.setPower(0);
+            rob.lifter.setPosition(.98);
+            sleep(200);
         }
 
 
