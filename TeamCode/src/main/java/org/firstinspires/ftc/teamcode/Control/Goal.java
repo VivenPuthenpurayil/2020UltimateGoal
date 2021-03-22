@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
@@ -41,6 +42,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_COREHEXMOTOR_INCH;
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_GOBUILDA435RPM_INCH;
+import static org.firstinspires.ftc.teamcode.Control.Constants.circumferenceObject.GO_BILDA_STANDARD_MECANUM;
 import static org.firstinspires.ftc.teamcode.Control.Constants.claws;
 import static org.firstinspires.ftc.teamcode.Control.Constants.collections;
 import static org.firstinspires.ftc.teamcode.Control.Constants.flys;
@@ -58,6 +60,7 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.Lefts;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.rightBacks;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.rightFronts;
 import static org.firstinspires.ftc.teamcode.Control.Constants.whacker;
+import static org.firstinspires.ftc.teamcode.Control.Constants.encoderCounts.*;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.backSenseS;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.leftSenseS;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.frontSenseS;
@@ -66,6 +69,14 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.whacker;
 
 public class Goal {
 
+    /**
+     * Creates a usable instance of Robot
+     * @param hardwareMap hardwareMap from {@link com.qualcomm.robotcore.eventloop.opmode.LinearOpMode}/{@link com.qualcomm.robotcore.eventloop.opmode.OpMode}
+     * @param runtime ElapsedTime instance from {@link com.qualcomm.robotcore.eventloop.opmode.LinearOpMode}/{@link com.qualcomm.robotcore.eventloop.opmode.OpMode}
+     * @param central Central class, child of {@link com.qualcomm.robotcore.eventloop.opmode.LinearOpMode}
+     * @param setup list of enum {@link setupType} describing what set of systems to initialize
+     * @throws InterruptedException
+     */
     public Goal(HardwareMap hardwareMap, ElapsedTime runtime, Central central, setupType... setup) throws InterruptedException {
         this.hardwareMap = hardwareMap;
         this.runtime = runtime;
@@ -131,23 +142,30 @@ public class Goal {
 
     // important non-confdiguration field
     public Orientation angles;
-    public ElapsedTime runtime;     //set in constructor to the runtime of running class
+
+    // INSTANCE_VARIABLES
+    /**
+     * Runtime instance (default synchronized with the Central class instance)
+     */
+    public ElapsedTime runtime;
+
+    /**
+     * OpMode child instance (default is the Central class)
+     */
     public Central central;
+
+    /**
+     * HardwareMap instance of the robot from {@link #central}
+     */
     public HardwareMap hardwareMap;
 
-    public boolean target = false;
-    public boolean moving1 = false;
-    public boolean moving2 = false;
-    public boolean moving3 = false;
-    public boolean stop = false;
-    public boolean straight = false;
-    public int x = 0;
-    public int y = 0;
-    public int blockNumber = 0;
 
-    public int[] wheelAdjust = {-1, -1, -1, -1};
-
-    public static double speedAdjust = 20.0 / 41.0;
+    /**
+     * Normalization of speed vectors in {@link #driveTrainMovementAngle(double, double)} to
+     * limit function to 0 to 1 range for movement
+     */
+    public static double SPEED_ADJUSTMENT = 20.0 / 41.0;
+    //TODO: Needs to be updated to normalize the vectors in a better way
 
     /**
      * Ratio of forward to strafe movement for any diagonal movement
@@ -156,12 +174,14 @@ public class Goal {
      */
     public static double FORWARD_TO_STRAFE_MOTION_RATIO = 1.25;
 
-    public void setWheelAdjust(int fr, int fl, int br, int bl) {
-        wheelAdjust[0] = fr;
-        wheelAdjust[1] = fl;
-        wheelAdjust[2] = br;
-        wheelAdjust[3] = bl;
-    }
+
+    /**
+     * Array of multiplicative adjustment of wheel vectors of a standard drivetrain
+     */
+    public int[] wheelAdjust = {-1, -1, -1, -1};
+
+
+
     //----specfic non-configuration fields
     //none rnh
 
@@ -536,6 +556,7 @@ public class Goal {
 
     }
 
+
     public void driveTrainEncoderMovement(double speed, double distance, double timeoutS, long waitAfter, movements movement) throws InterruptedException {
 
         int[] targets = new int[drivetrain.length];
@@ -665,6 +686,7 @@ public class Goal {
             double integral = lastint + error*(sleepTime+0.01);
             double derivative = (error-lasterror)/(sleepTime+0.01);
             double speed = p*error + i*integral + d*derivative + bias;
+
             fly.setPower(speed);
             lasterror = error;
             lastint = integral;
@@ -753,6 +775,23 @@ public class Goal {
             drivetrain[i].setPower(speed[i]);
         }
     }
+
+    /**
+     * Runs the drivetrain to run at a certain angle
+     * @param speed desired drivetrain speed
+     * @param degrees desired angle of movement
+     */
+    public void driveTrainMovementAngle(double speed, double degrees) {
+
+        double[] speeds = anyDirection(speed, degrees);
+        motorFR.setPower(movements.forward.directions[0] * speeds[0]);
+        motorFL.setPower(movements.forward.directions[1] * speeds[1]);
+        motorBR.setPower(movements.forward.directions[2] * speeds[1]);
+        motorBL.setPower(movements.forward.directions[3] * speeds[0]);
+
+    }
+
+
     public void driveTrainTimeMovement(double speed, movements movement, long duration, long waitAfter) throws InterruptedException {
         double[] signs = movement.getDirections();
         for (DcMotor motor: drivetrain){
@@ -1030,18 +1069,38 @@ public class Goal {
 
 
 
-    //-------------------SET FUNCTIONS--------------------------------
-    public void setCentral(Central central) {
-        this.central = central;
-    }
+    //-----------------------------SETTER FUNCTION--------------------------------------------------
+    /**
+     * Sets new instance of HardwareMap to Robot
+     * @param hardwareMap HardwareMap instance
+     */
     public void setHardwareMap(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
     }
+
+    /**
+     * Sets instance of ElapsedTime {@link #runtime} to robot
+     * @param runtime new instance of ElapsedTime
+     */
     public void setRuntime(ElapsedTime runtime) {
         this.runtime = runtime;
     }
 
-    //-------------------CHOICE ENUMS-------------------------
+    /**
+     * Set multiplicative adjustments of wheel vectors of a standard drivetrain
+     * @param fr front-right wheel
+     * @param fl front-left wheel
+     * @param br back-right wheel
+     * @param bl back-left wheel
+     */
+    public void setWheelAdjust(int fr, int fl, int br, int bl) {
+        wheelAdjust[0] = fr;
+        wheelAdjust[1] = fl;
+        wheelAdjust[2] = br;
+        wheelAdjust[3] = bl;
+    }
+
+    //-----------------------------CHOICE ENUMS-----------------------------------------------------
     public enum movements
     {
         // FR FL BR BL
@@ -1077,6 +1136,12 @@ public class Goal {
         }
     }
 
+    // TODO: finish motor config
+/*
+    public enum motorConfig{
+        drivetrain(GOBILDA_435, GO_BILDA_STANDARD_MECANUM)
+
+    }*/
 
     public enum turnside {
         ccw, cw
@@ -1104,27 +1169,15 @@ public class Goal {
         double theta = angleRadians;
         double beta = Math.atan(FORWARD_TO_STRAFE_MOTION_RATIO);
 
-        double v1 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) + speed * Math.cos(theta) / Math.cos(beta));
-        double v2 = speedAdjust * (speed * Math.sin(theta) / Math.sin(beta) - speed * Math.cos(theta) / Math.cos(beta));
+        double v1 = SPEED_ADJUSTMENT * (speed * Math.sin(theta) / Math.sin(beta) + speed * Math.cos(theta) / Math.cos(beta));
+        double v2 = SPEED_ADJUSTMENT * (speed * Math.sin(theta) / Math.sin(beta) - speed * Math.cos(theta) / Math.cos(beta));
 
         double[] motorSpeeds = {v1, v2};
         return motorSpeeds;
     }
 
-    /**
-     *
-     * @param speed
-     * @param degrees
-     */
-    public void driveTrainMovementAngle(double speed, double degrees) {
 
-        double[] speeds = anyDirection(speed, degrees);
-        motorFR.setPower(movements.forward.directions[0] * speeds[0]);
-        motorFL.setPower(movements.forward.directions[1] * speeds[1]);
-        motorBR.setPower(movements.forward.directions[2] * speeds[1]);
-        motorBL.setPower(movements.forward.directions[3] * speeds[0]);
 
-    }
 
     public enum axis {
         front, center, back
