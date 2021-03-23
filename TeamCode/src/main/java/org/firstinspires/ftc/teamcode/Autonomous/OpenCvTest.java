@@ -169,7 +169,7 @@ public class OpenCvTest extends AutonomousControl
          * Working variables
          */
 
-        //new encoder function on flywheel
+
         Mat region1_Cb;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();

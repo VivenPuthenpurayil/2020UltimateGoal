@@ -287,7 +287,7 @@ public class Goal {
     public void setupFly() throws InterruptedException {
         fly = motor(flys, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
 
-        encoder(EncoderMode.ON, fly);
+        encoder(EncoderMode.OFF, fly);
 
 
     }
@@ -647,7 +647,7 @@ public class Goal {
         }
     }
 
-    public void PIDFly(double totalTime, double goal, double p, double i, double d, double sleepTime, double bias){
+    public void PIDFly(double totalTime, double goal, double p, double i, double d, double sleepTime, double correct, double bias){
         runtime.reset();
         double lasterror = 0;
         double lastint = 0;
@@ -658,8 +658,10 @@ public class Goal {
             double error = goal - velocityFly();
             double integral = lastint + error*(sleepTime+0.01);
             double derivative = (error-lasterror)/(sleepTime+0.01);
-            double speed = p*error + i*integral + d*derivative + bias;
-            fly.setPower(speed);
+            double total_correct = p*error + i*integral + d*derivative + bias;
+
+            fly.setPower(total_correct*correct);
+
             lasterror = error;
             lastint = integral;
             central.sleep((long)st);
@@ -669,12 +671,30 @@ public class Goal {
     public double velocityFly(){
         int curr = fly.getCurrentPosition();
         double initTime = runtime.seconds();
-        while(runtime.seconds()-initTime<0.01){
+        while(runtime.seconds()-initTime<0.1){
         }
         int newPos = fly.getCurrentPosition();
-        return ((double)(newPos-curr)/0.01);
+        return ((double)(curr-newPos)/0.1);
     }
 
+  /*  public double velocityFlyYashAndAniketitty(ArrayList<Double> previous){
+        int curr = fly.getCurrentPosition();
+        double initTime = runtime.seconds();
+        while(runtime.seconds()-initTime<0.01){
+        }
+        if (previous.size() >= 30) {
+            previous.remove(0);
+        }
+        int newPos = fly.getCurrentPosition();
+        double ret = ((double)(curr-newPos)/0.01);
+        previous.add(ret);
+        double sum=0;
+        for (int i=previous.size()-1; i>=0; i--) {
+            sum += previous.get(i);
+        }
+        return sum/(previous.size() * 0.01);
+    }
+*/
     public void encodeCoreHexMovement(double speed, double distance, double timeoutS, long waitAfter, movements movement, DcMotor... motors) throws InterruptedException {
 
         int[] targets = new int[motors.length];
