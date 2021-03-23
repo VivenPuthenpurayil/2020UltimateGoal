@@ -9,29 +9,116 @@ public class Constants {
 //hi
     //--------------------------------ENCODERS-------------------------
 
+    /**
+     * Enum of encoder counts by motor, add new motor counts in here.
+     * Includes instance function for countsPerInch()
+     */
+    public enum encoderCounts{
+        GOBILDA_312(537.6),
+        GOBILDA_435(383.6),
+        REV_CORE_HEX(288),
+        REV_STANDARD_MOTOR(1120),
+        ;
 
+        /**
+         * Counts per revolution of specified enum value
+         */
+        double counts_per_rev;
+
+        /**
+         * @param counts_per_rev    Counts per revolution of specified enum value
+         */
+        encoderCounts(double counts_per_rev) {
+            this.counts_per_rev = counts_per_rev;
+        }
+
+        /**
+         * Returns counts per inch for the motor assuming no gearing.
+         * @param object wheelType of {@link circumferenceObject} enum
+         * @return counts per inch
+         */
+        public double countsPerInch(circumferenceObject object){
+            return countsPerInch(1, object.diameter);
+        }
+
+        /**
+         * Returns counts per inch for the motor assuming no gearing.
+         * @param diameterInches diameter (in inches)
+         * @return counts per inch
+         */
+        public double countsPerInch(double diameterInches){
+            return countsPerInch(1, diameterInches);
+        }
+
+        /**
+         * Returns counts per inch for the motor.
+         * @param drive_reduction gearing ratio, > 1 if geared for speed
+         * @return counts per inch
+         */
+        public double countsPerInch(double drive_reduction, double diameterInches){
+            return this.counts_per_rev * drive_reduction / (diameterInches * Math.PI);
+        }
+
+    }
+
+    public enum circumferenceObject{
+        GO_BILDA_STANDARD_MECANUM(4),
+        GREEN_COMPLIANT_WHEEL(4);
+
+        double diameter;
+
+        circumferenceObject(double diameterInches) {
+            this.diameter = diameterInches;
+        }
+    }
+
+    /**
+     * Counts per revolut
+     */
     public static final double COUNTS_PER_MOTOR_REV = 1120;
     public static final double COUNTS_PER_MOTOR_TETRIX = 1440;
-    public static final double COUNTS_PER_MOTOR_GOBUILDA312RPM = 537.6;
-    public static final double COUNTS_PER_MOTOR_GOBUILDA435RPM = 383.6;
-    public static final double COUNTS_PER_MOTOR_COREHEXMOTOR = 288;
+
+    /**
+     * Counts per revolution of a GoBilda 312 RPM Motor
+     */
+    public static final double COUNTS_PER_MOTOR_GOBILDA_312_RPM = 537.6;
+
+    /**
+     * Counts per revolution of a GoBilda 435 RPM Motor
+     */
+    public static final double COUNTS_PER_MOTOR_GOBILDA_435_RPM = 383.6;
+
+    /**
+     * Counts per revolution of a REV Core HEX Motor
+     */
+    public static final double COUNTS_PER_MOTOR_REV_CORE_HEX_MOTOR = 288;
+
     public static final double DRIVE_GEAR_REDUCTION = 1.0;
     public static final double DRIVE_GEAR_REDUCTION_NEW = 2.0/3.0;
     public static final double DRIVE_GEAR_REDUCTION_EVENNEWER = 2.0;
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
     public static final double WHEEL_DIAMETER_INCHES_NEW = 3.94;
     public static final double SPOOL_DIAMETER_INCHES = 1.25;
+
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);                   // Conversion: Encoder Count to Inches
+
+
     public static final double COUNTS_PER_TETRIX_INCH = (COUNTS_PER_MOTOR_TETRIX * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);               // Conversion: Encoder Counts Motor Tetrix to Inches
-    public static final double COUNTS_PER_GOBUILDA312RPM_INCH = (COUNTS_PER_MOTOR_GOBUILDA312RPM * DRIVE_GEAR_REDUCTION_NEW) /
+
+
+    public static final double COUNTS_PER_GOBUILDA312RPM_INCH = (COUNTS_PER_MOTOR_GOBILDA_312_RPM * DRIVE_GEAR_REDUCTION_NEW) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public static final double COUNTS_PER_GOBUILDA435RPM_INCH = (COUNTS_PER_MOTOR_GOBUILDA435RPM * DRIVE_GEAR_REDUCTION_EVENNEWER) /
+
+
+    public static final double COUNTS_PER_GOBUILDA435RPM_INCH = (COUNTS_PER_MOTOR_GOBILDA_435_RPM * DRIVE_GEAR_REDUCTION_EVENNEWER) /
             (WHEEL_DIAMETER_INCHES_NEW * 3.1415);
-    public static final double COUNTS_PER_COREHEXMOTOR_INCH = (COUNTS_PER_MOTOR_COREHEXMOTOR * DRIVE_GEAR_REDUCTION) /
+
+
+    public static final double COUNTS_PER_COREHEXMOTOR_INCH = (COUNTS_PER_MOTOR_REV_CORE_HEX_MOTOR * DRIVE_GEAR_REDUCTION) /
             (SPOOL_DIAMETER_INCHES * 3.1415);
-    public static final double COUNTS_PER_GOBUILDA312RPM_ROT = (COUNTS_PER_MOTOR_GOBUILDA312RPM * DRIVE_GEAR_REDUCTION_NEW);
+    public static final double COUNTS_PER_GOBUILDA312RPM_ROT = (COUNTS_PER_MOTOR_GOBILDA_312_RPM * DRIVE_GEAR_REDUCTION_NEW);
 
     //--------------------------------TELE-OP VALUES--------------------
     public static final double DEAD_ZONE_SIZE = 0.1;
