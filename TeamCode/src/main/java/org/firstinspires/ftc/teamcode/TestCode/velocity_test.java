@@ -26,7 +26,7 @@ public class velocity_test extends AutonomousControl {
         telemetry.addLine("Start!");
 
         telemetry.update();
-
+/hi
         if (opModeIsActive()) {
             while (true){
 
