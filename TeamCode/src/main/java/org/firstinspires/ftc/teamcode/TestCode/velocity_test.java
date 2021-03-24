@@ -27,9 +27,31 @@ public class velocity_test extends AutonomousControl {
 
         telemetry.update();
         if (opModeIsActive()) {
+
+
             while (true){
 
-                rob.fly.setPower(-.1);
+                rob.fly.setPower(-.715);
+                sleep(250);
+                rob.lifter.setPosition(.86);
+                sleep(500);
+                for (int i = 0; i <= 100; i++) {
+
+                    telemetry.addData("Velocity", rob.velocityFly());
+                    telemetry.update();
+
+                    rob.whack.setPosition(0.45);
+                    sleep(500);
+
+
+
+                    rob.whack.setPosition(0);
+                    sleep(750);
+
+
+                }
+
+//                rob.fly.setPower(-.625);
 //                rob.velocityFly();
 //                telemetry.addData("Velocity", rob.velocityFly());
 //                telemetry.update();
@@ -37,9 +59,11 @@ public class velocity_test extends AutonomousControl {
     //            ArrayList<Double> a = new ArrayList<>();
         //        rob.velocityFlyYashAndAniketitty(a);
                telemetry.addData("Velocity", rob.velocityFly());
-                telemetry.update();
+               telemetry.update();
 
             }
+
+
 
 
 

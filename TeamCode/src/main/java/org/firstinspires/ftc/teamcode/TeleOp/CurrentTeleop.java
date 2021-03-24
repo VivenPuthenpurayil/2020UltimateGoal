@@ -145,7 +145,14 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (flywheelon) {
-                rob.fly.setPower(-0.625);
+                rob.fly.setPower(-0.715);
+            }
+
+            if(gamepad2.y){
+                rob.pinch.setPosition(1);
+                sleep(500);
+                rob.encoderMovement(0.75, 8, 20, 0, Goal.movements.backward, rob.claw);
+                rob.driveTrainEncoderMovement(0.75, 10, 10, 0, Goal.movements.backward);
             }
 
             if(gamepad2.a) {
@@ -163,9 +170,8 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.fly.setPower(-0.625-(i*0.02));
-//                    sleep(500);
-                    sleep(500);
+//                    rob.fly.setPower(-0.625);
+//                    sleep(200);
 
                     if(gamepad2.b){
                         emergencystopDriver2();
@@ -180,8 +186,8 @@ public class CurrentTeleop extends TeleOpControl {
                         break;
                     }
 
-                    rob.whack.setPosition(0.05);
-                    sleep(500);
+                    rob.whack.setPosition(0);
+                    sleep(750);
 
                     if(gamepad2.b){
                         emergencystopDriver2();

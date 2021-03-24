@@ -669,12 +669,13 @@ public class Goal {
     }
 
     public double velocityFly(){
+        double time = 3;
         int curr = fly.getCurrentPosition();
         double initTime = runtime.seconds();
-        while(runtime.seconds()-initTime<0.1){
+        while(runtime.seconds()-initTime<time){
         }
         int newPos = fly.getCurrentPosition();
-        return ((double)(curr-newPos)/0.1);
+        return ((double)(curr-newPos)/time);
     }
 
   /*  public double velocityFlyYashAndAniketitty(ArrayList<Double> previous){
