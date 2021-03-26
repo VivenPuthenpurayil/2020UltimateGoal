@@ -647,32 +647,74 @@ public class Goal {
         }
     }
 
-    public void PIDFly(double totalTime, double goal, double p, double i, double d, double sleepTime, double correct, double bias){
-        runtime.reset();
-        double lasterror = 0;
-        double lastint = 0;
+    public void PIDFly(double totalTime, double targetPow, double targetSpeed, double p, double i, double d, double sleepTime, double correct, double bias){
+        double initTime = runtime.seconds();
+        double lastError = 0;
+        double lastIntegral = 0;
+        double lastTime = initTime;
+        double lastCount = fly.getCurrentPosition();
 
         double st = sleepTime*1000;
 
-        while(runtime.seconds()<totalTime){
-            double error = goal - velocityFly();
-            double integral = lastint + error*(sleepTime+0.01);
-            double derivative = (error-lasterror)/(sleepTime+0.01);
-            double total_correct = p*error + i*integral + d*derivative + bias;
+        while(runtime.seconds()-initTime<totalTime){
+            double timeElapsed = runtime.seconds() - lastTime;
+            double countChange = fly.getCurrentPosition() - lastCount;
 
-            fly.setPower(total_correct*correct);
 
-            lasterror = error;
-            lastint = integral;
-            central.sleep((long)st);
+            double error = targetSpeed - Math.abs(countChange/timeElapsed);
+            double integral = lastIntegral + error * (timeElapsed);
+            double derivative = (error - lastError)/(timeElapsed);
+
+            double total_correct = p * error + i * integral + d * derivative + bias;
+
+            central.telemetry.addData("speed value", targetPow + (-1*(total_correct*correct)));
+            central.telemetry.addData("p correct", p*error);
+            central.telemetry.addData("i correct", i*integral);
+            central.telemetry.addData("d correct", d*derivative);
+            central.telemetry.addData("velocity error", error);
+            central.telemetry.addData("integral", integral);
+            central.telemetry.addData("derivative", derivative);
+            central.telemetry.addData("count change", countChange);
+            central.telemetry.addData("time elapsed", timeElapsed);
+            central.telemetry.addData("Actual velocity", Math.abs(countChange/timeElapsed));
+
+            central.telemetry.update();
+
+            if (targetPow + (-1*(total_correct*correct)) > -1) {
+
+                fly.setPower(targetPow + (-1*(total_correct * correct)));
+                central.sleep((long)st);
+            }
+            else {
+                fly.setPower(-1);
+                central.sleep((long)st);
+            }
+
+
+
+ /*           whack.setPosition(0.45);
+            central.sleep(500);
+
+
+            whack.setPosition(0);
+            central.sleep(500);
+*/
+            lastError = error;
+            lastIntegral = integral;
+            lastTime += timeElapsed;
+            lastCount += countChange;
+            p *= 2;
+            i *= 2;
+            d *= 2;
         }
     }
 
-    public double velocityFly(){
-        double time = 3;
+    public double velocityFly(double inVelo){
+        double time = .02;
         int curr = fly.getCurrentPosition();
         double initTime = runtime.seconds();
         while(runtime.seconds()-initTime<time){
+            fly.setPower(inVelo);
         }
         int newPos = fly.getCurrentPosition();
         return ((double)(curr-newPos)/time);
