@@ -115,6 +115,11 @@ public class MarchAuton extends AutonomousControl
                 sleep(50);
             }
 
+            rob.lifter.setPosition(.86);
+            sleep(500);
+
+//            pipeline.value = 4;
+
             if (pipeline.value == 4){
 
                 do{
@@ -213,7 +218,7 @@ public class MarchAuton extends AutonomousControl
                     telemetry.update();
 
                 }
-                while(distanceFront >1000 || distanceFront >15 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while(distanceFront >1000 || distanceFront > 13 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
 
                 rob.stopDrivetrain();
 
@@ -239,7 +244,7 @@ public class MarchAuton extends AutonomousControl
                     distanceFront= rob.Front.getDistance(DistanceUnit.INCH);
 
                 }
-                while (distanceBack > 1000 || distanceFront < 59 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
+                while (distanceBack > 1000 || distanceFront < 60 || Double.compare(distanceBack, Double.NaN) == 0 && opModeIsActive());
                 rob.stopDrivetrain();
                 sleep(200);
 
@@ -562,22 +567,20 @@ public class MarchAuton extends AutonomousControl
 
             rob.stopDrivetrain();
 
-/*
-            rob.fly.setPower(-0.62);
+
+            rob.fly.setPower(-.645);
             sleep(2500);
-            rob.lifter.setPosition(.86);
-            sleep(500);
+
             for (int i = 0; i <= 2; i++) {
-                rob.fly.setPower(-0.665);
-                sleep(300);
+//                rob.fly.setPower(-.65);
+//                sleep(300);
                 rob.whack.setPosition(0.42);
                 sleep(500);
                 rob.whack.setPosition(0);
-                sleep(750);
+                sleep(500);
             }
- */
             // move to white line
-            rob.driveTrainEncoderMovement(1, 10, 10, 0, Goal.movements.forward);
+            rob.driveTrainEncoderMovement(1, 15, 10, 0, Goal.movements.forward);
         }
     }
 
