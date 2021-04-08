@@ -431,7 +431,8 @@ public class MarchAuton extends AutonomousControl
                 rob.stopDrivetrain();
 
 
-            }else{
+            }
+            else{
                 //dropping off the first goal
 
                 do{
