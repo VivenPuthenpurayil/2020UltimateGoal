@@ -77,7 +77,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  */
 
 
-@TeleOp(name="ULTIMATEGOAL Vuforia Nav Webcam", group ="Concept")
+@TeleOp(name="ULTIMATEGOAL Vuforia Nav Webcam Test", group ="Concept")
 public class VuforiaUltimateGoal extends AutonomousControl {
     private ElapsedTime runtime = new ElapsedTime();
     private boolean target = false;

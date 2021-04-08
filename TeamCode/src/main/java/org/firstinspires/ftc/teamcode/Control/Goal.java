@@ -656,6 +656,7 @@ public class Goal {
 
         double st = sleepTime*1000;
 
+
         while(runtime.seconds()-initTime<totalTime){
             double timeElapsed = runtime.seconds() - lastTime;
             double countChange = fly.getCurrentPosition() - lastCount;
@@ -680,6 +681,11 @@ public class Goal {
 
             central.telemetry.update();
 
+            lastError = error;
+            lastIntegral = integral;
+            lastTime += timeElapsed;
+            lastCount += countChange;
+
             if (targetPow + (-1*(total_correct*correct)) > -1) {
 
                 fly.setPower(targetPow + (-1*(total_correct * correct)));
@@ -690,8 +696,6 @@ public class Goal {
                 central.sleep((long)st);
             }
 
-
-
  /*           whack.setPosition(0.45);
             central.sleep(500);
 
@@ -699,18 +703,14 @@ public class Goal {
             whack.setPosition(0);
             central.sleep(500);
 */
-            lastError = error;
-            lastIntegral = integral;
-            lastTime += timeElapsed;
-            lastCount += countChange;
-            p *= 2;
-            i *= 2;
-            d *= 2;
+
+//            p *= 2;
+//            i *= 2;
+//            d *= 2;
         }
     }
 
-    public double velocityFly(double inVelo){
-        double time = .02;
+    public double velocityFly(double inVelo, double time){
         int curr = fly.getCurrentPosition();
         double initTime = runtime.seconds();
         while(runtime.seconds()-initTime<time){
