@@ -145,7 +145,7 @@ public class CurrentTeleop extends TeleOpControl {
             }
 
             if (flywheelon) {
-                rob.fly.setPower(-.675);
+                rob.fly.setPower(-.7);
             }
 
             if(gamepad2.y){
@@ -161,7 +161,7 @@ public class CurrentTeleop extends TeleOpControl {
                 rob.motorFR.setPower(0);
                 rob.motorBR.setPower(0);
                 sleep(250);
-                rob.lifter.setPosition(.86);
+                rob.lifter.setPosition(.85);
                 sleep(500);
                 for (int i = 0; i <= 2; i++) {
 

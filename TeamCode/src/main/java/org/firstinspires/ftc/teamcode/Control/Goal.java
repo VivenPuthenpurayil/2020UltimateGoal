@@ -667,7 +667,7 @@ public class Goal {
             double derivative = (error - lastError)/(timeElapsed);
 
             double total_correct = p * error + i * integral + d * derivative + bias;
-
+/*
             central.telemetry.addData("speed value", targetPow + (-1*(total_correct*correct)));
             central.telemetry.addData("p correct", p*error);
             central.telemetry.addData("i correct", i*integral);
@@ -680,7 +680,7 @@ public class Goal {
             central.telemetry.addData("Actual velocity", Math.abs(countChange/timeElapsed));
 
             central.telemetry.update();
-
+*/
             lastError = error;
             lastIntegral = integral;
             lastTime += timeElapsed;
@@ -717,7 +717,7 @@ public class Goal {
             fly.setPower(inVelo);
         }
         int newPos = fly.getCurrentPosition();
-        return ((double)(curr-newPos)/time);
+        return ((double)(curr-newPos)/(runtime.seconds()-initTime));
     }
 
   /*  public double velocityFlyYashAndAniketitty(ArrayList<Double> previous){

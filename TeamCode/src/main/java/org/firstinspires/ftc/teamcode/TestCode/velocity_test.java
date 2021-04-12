@@ -29,27 +29,28 @@ public class velocity_test extends AutonomousControl {
         telemetry.update();
         if (opModeIsActive()) {
 
-            rob.lifter.setPosition(.86);
+            rob.lifter.setPosition(.85);
             sleep(500);
 
-            rob.fly.setPower(-.66);
-            sleep(3000);
+            rob.fly.setPower(-.7375);
+            sleep(4000);
 
             //rob.fly.setPower(-.65);
             for(int i = 0; i<100; i++) {
-//                rob.PIDFly(3, -.66, 240, 0.1, 0.01, 0, .2, 0.00275, 0);
-                rob.PIDFly(4, -.66, 1066, .05, .018, 0, .025, .00062, 0);
-   //             double val = rob.velocityFly(-.65, 4);
-   //             telemetry.addData("velocity", "%.2f", val);
-     //           telemetry.update();
 
+                rob.PIDFly(3, -.7375, 1158, .1, .03, 0, .15, .001, 0);
+
+ /*                double val = rob.velocityFly(-.73, 4);
+                telemetry.addData("velocity", "%.2f", val);
+                telemetry.update();
+*/
 
                 rob.whack.setPosition(0.45);
-                sleep(400);
+                sleep(500);
 
 
                 rob.whack.setPosition(0);
-                sleep(300);
+                sleep(500);
 
 
             }
