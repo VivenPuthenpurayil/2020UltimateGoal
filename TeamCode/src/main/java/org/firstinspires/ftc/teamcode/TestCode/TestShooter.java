@@ -16,7 +16,7 @@ public class TestShooter extends AutonomousControl {
         setup(runtime, Goal.setupType.shooter);
         telemetry.addLine("Start!");
         telemetry.update();
-
+//hbioh
         if (opModeIsActive()){
             rob.shooterRight.setPower(0.9);
             rob.shooterLeft.setPower(-0.9);
