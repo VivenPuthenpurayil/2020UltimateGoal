@@ -148,7 +148,11 @@ public class Constants {
     public static final String motorBLS = "motorBL";
     public static final String flys = "fly";
     public static final String collections = "collection";
+    public static final String shooterLeftS = "shooterLeft";
+    public static final String shooterRightS = "shooterRight";
 
+    public static final String feederLeftS = "feederLeft";
+    public static final String feederRightS = "feederRight";
 
     public static final String claws = "claw";
    // public static final String grabbers = "grabber";M

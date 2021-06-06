@@ -43,10 +43,10 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_COREHE
 import static org.firstinspires.ftc.teamcode.Control.Constants.COUNTS_PER_GOBUILDA435RPM_INCH;
 import static org.firstinspires.ftc.teamcode.Control.Constants.claws;
 import static org.firstinspires.ftc.teamcode.Control.Constants.collections;
-import static org.firstinspires.ftc.teamcode.Control.Constants.colorSensorS;
+import static org.firstinspires.ftc.teamcode.Control.Constants.feederLeftS;
+import static org.firstinspires.ftc.teamcode.Control.Constants.feederRightS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.flys;
 import static org.firstinspires.ftc.teamcode.Control.Constants.imuS;
-import static org.firstinspires.ftc.teamcode.Control.Constants.leftFronts;
 import static org.firstinspires.ftc.teamcode.Control.Constants.lifters;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorBLS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.motorBRS;
@@ -59,6 +59,8 @@ import static org.firstinspires.ftc.teamcode.Control.Constants.Fronts;
 import static org.firstinspires.ftc.teamcode.Control.Constants.Lefts;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.rightBacks;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.rightFronts;
+import static org.firstinspires.ftc.teamcode.Control.Constants.shooterLeftS;
+import static org.firstinspires.ftc.teamcode.Control.Constants.shooterRightS;
 import static org.firstinspires.ftc.teamcode.Control.Constants.whacker;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.backSenseS;
 //import static org.firstinspires.ftc.teamcode.Control.Constants.leftSenseS;
@@ -121,6 +123,10 @@ public class Goal {
                     setupOpenCV();
                     break;
 
+                case shooter:
+                    setupShooter();
+                    break;
+
             }
 
             i.append(type.name()).append(" ");
@@ -166,6 +172,7 @@ public class Goal {
     public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     public static final boolean PHONE_IS_PORTRAIT = false  ;
 
+
     public final String VUFORIA_KEY =
             " AYzLd0v/////AAABmR035tu9m07+uuZ6k86JLR0c/MC84MmTzTQa5z2QOC45RUpRTBISgipZ2Aop4XzRFFIvrLEpsop5eEBl5yu5tJxK6jHbMppJyWH8lQbvjz4PAK+swG4ALuz2M2MdFXWl7Xh67s/XfIFSq1UJpX0DgwmZnoDCYHmx/MnFbyxvpWIMLZziaJqledMpZtmH11l1/AS0oH+mrzWQLB57w1Ur0FRdhpxcrZS9KG09u6I6vCUc8EqkHqG7T2Zm4QdnytYWpVBBu17iRNhmsd3Ok3w8Pn22blBYRo6dZZ8oscyQS1ZtilM1YT49ORQHc8mu/BMWh06LxdstWctSiGiBV0+Wn3Zk++xQ750c64lg3QLjNkXc";
 
@@ -187,6 +194,7 @@ public class Goal {
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     public WebcamName webcamName = null;
+
 
     public List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     public VuforiaTrackables targetsUltimateGoal;
@@ -215,6 +223,12 @@ public class Goal {
     public Servo pinch;
     public Servo lifter;
     public ModernRoboticsI2cRangeSensor Back, Right, Front, Left;
+
+    public DcMotor shooterLeft;
+    public DcMotor shooterRight;
+
+    public CRServo feederLeft;
+    public CRServo feederRight;
 
     public BNO055IMUImpl imu;
 
@@ -290,6 +304,13 @@ public class Goal {
         encoder(EncoderMode.OFF, fly);
 
 
+    }
+
+    public void setupShooter() throws InterruptedException{
+        shooterLeft = motor(shooterLeftS, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        shooterRight = motor(shooterRightS, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        feederLeft = servo(feederLeftS, CRServo.Direction.FORWARD, 0);
+        feederRight = servo(feederRightS, DcMotorSimple.Direction.FORWARD, 0);
     }
 
     public void setupWobbleGoalSystem() throws InterruptedException {
@@ -710,34 +731,15 @@ public class Goal {
         }
     }
 
-    public double velocityFly(double inVelo, double time){
-        int curr = fly.getCurrentPosition();
-        double initTime = runtime.seconds();
-        while(runtime.seconds()-initTime<time){
-            fly.setPower(inVelo);
-        }
-        int newPos = fly.getCurrentPosition();
-        return ((double)(curr-newPos)/(runtime.seconds()-initTime));
-    }
-
-  /*  public double velocityFlyYashAndAniketitty(ArrayList<Double> previous){
+    public double velocityFly(){
         int curr = fly.getCurrentPosition();
         double initTime = runtime.seconds();
         while(runtime.seconds()-initTime<0.01){
         }
-        if (previous.size() >= 30) {
-            previous.remove(0);
-        }
         int newPos = fly.getCurrentPosition();
-        double ret = ((double)(curr-newPos)/0.01);
-        previous.add(ret);
-        double sum=0;
-        for (int i=previous.size()-1; i>=0; i--) {
-            sum += previous.get(i);
-        }
-        return sum/(previous.size() * 0.01);
+        return ((double)(newPos-curr)/0.01);
     }
-*/
+
     public void encodeCoreHexMovement(double speed, double distance, double timeoutS, long waitAfter, movements movement, DcMotor... motors) throws InterruptedException {
 
         int[] targets = new int[motors.length];
@@ -1082,7 +1084,7 @@ public class Goal {
         ON, OFF;
     }
     public enum setupType{
-        autonomous, teleop, collectionsystem, storage, flywheel, drivetrain_system, wobblegoal, ultra, imu, openCV;
+        autonomous, teleop, collectionsystem, storage, flywheel, drivetrain_system, wobblegoal, ultra, imu, openCV, shooter;
     }
 
 
@@ -1119,7 +1121,11 @@ public class Goal {
         linearUp(1),
         linearDown(-1),
         clawOut(-1),
-        clawIn(1);
+        clawIn(1),
+        shootForward(1, -1),
+        shootBackward(-1, 1),
+        feederForward(1, -1),
+        feederBackward(-1, 1);
 
 
 
@@ -1139,6 +1145,12 @@ public class Goal {
         ccw, cw
     }
 
+    /**
+     * Finds the set of two direction speeds at the mecanum's movement angles that create a vector movement towards the desired angle
+     * @param speed speed of movement
+     * @param angleDegrees angle (in degrees) of movement
+     * @return array of motor directions
+     */
     public static double[] anyDirection(double speed, double angleDegrees) {
         double theta = Math.toRadians(angleDegrees);
         double beta = Math.atan(yToXRatio);
